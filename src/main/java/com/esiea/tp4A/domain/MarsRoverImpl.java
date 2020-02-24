@@ -1,31 +1,146 @@
 package com.esiea.tp4A.domain;
 
-import com.esiea.tp4A.domain.Position.FixedPosition;
+import java.text.CharacterIterator;
+import java.text.StringCharacterIterator;
 
 public class MarsRoverImpl implements MarsRover {
-	private FixedPosition pos;
+	private Position pos;
+
+	@Override
+	public MarsRover initialize(Position position) {
+		setPos(position);
+		return this;
+	}
 
 	@Override
 	public Position move(String command) {
-		switch (command) {
-		case "f":
-			return Position.of(0, 1, Direction.NORTH);
-		case "b":
-			return Position.of(0, -1, Direction.SOUTH);
-		case "l":
-			return Position.of(-1, 0, Direction.WEST);
-		case "r":
-			return Position.of(1, 0, Direction.EAST);
-		default:
-			return Position.of(0, 0, null);
+		CharacterIterator it = new StringCharacterIterator(command);
+		
+		while(it.current() != CharacterIterator.DONE) {
+			computeMovement(it.current());	
+			it.next();
 		}
+		
+		return getPos();
 	}
 
-	public FixedPosition getPos() {
+    /**
+	 * Iterate every step of the command and process it
+	 * @param c
+	 */
+	private void computeMovement(char c) {
+		switch (c) {
+		case 'f':
+			moveForward(c);
+			break;
+		case 'b':
+			moveBackward(c);
+			break;
+		case 'l':
+			rotateLeft();
+			break;
+		case 'r':
+			rotateRight();
+		default:
+			break;
+		};
+	}
+
+	/**
+	 * Allow the rover to go forward depending on the direction
+	 * @param c
+	 */
+	private void moveForward(char c) {
+		switch(pos.getDirection()) {
+		case NORTH:
+			setPos(Position.of(pos.getX(), pos.getY() + 1, Direction.NORTH));
+			break;
+		case SOUTH:
+			setPos(Position.of(pos.getX(), pos.getY() - 1, Direction.SOUTH));
+			break;
+		case EAST:
+			setPos(Position.of(pos.getX() + 1, pos.getY(), Direction.EAST));
+			break;
+		case WEST:
+			setPos(Position.of(pos.getX() - 1, pos.getY(), Direction.WEST));
+			break;
+		default:
+			break;
+		};
+	}
+
+	/**
+	 * Allow the rover to go backward depending on the direction
+	 * @param c
+	 */
+	private void moveBackward(char c) {
+		switch(pos.getDirection()) {
+		case NORTH:
+			setPos(Position.of(pos.getX(), pos.getY() - 1, Direction.NORTH));
+			break;
+		case SOUTH:
+			setPos(Position.of(pos.getX(), pos.getY() + 1, Direction.SOUTH));
+			break;
+		case EAST:
+			setPos(Position.of(pos.getX() - 1, pos.getY(), Direction.EAST));
+			break;
+		case WEST:
+			setPos(Position.of(pos.getX() + 1, pos.getY(), Direction.WEST));
+			break;
+		default:
+			break;
+		};
+	}
+
+	/**
+	 * Rotate the direction to the right
+	 */
+	private void rotateRight() {
+		switch (pos.getDirection()) {
+		case NORTH:
+			setPos(Position.of(pos.getX(), pos.getY(), Direction.EAST));
+			break;
+		case SOUTH:
+			setPos(Position.of(pos.getX(), pos.getY(), Direction.WEST));
+			break;
+		case EAST:
+			setPos(Position.of(pos.getX(), pos.getY(), Direction.SOUTH));
+			break;
+		case WEST:
+			setPos(Position.of(pos.getX(), pos.getY(), Direction.NORTH));
+			break;
+		default:
+			break;
+		};
+	}
+
+	/*
+	 * Rotate the direction to the left
+	 */
+	private void rotateLeft() {
+		switch (pos.getDirection()) {
+		case NORTH:
+			setPos(Position.of(pos.getX(), pos.getY(), Direction.WEST));
+			break;
+		case SOUTH:
+			setPos(Position.of(pos.getX(), pos.getY(), Direction.EAST));
+			break;
+		case EAST:
+			setPos(Position.of(pos.getX(), pos.getY(), Direction.NORTH));
+			break;
+		case WEST:
+			setPos(Position.of(pos.getX(), pos.getY(), Direction.SOUTH));
+			break;
+		default:
+			break;
+		};
+	}
+  
+	private Position getPos() {
 		return pos;
 	}
 
-	public void setPos(FixedPosition pos) {
+	private void setPos(Position pos) {
 		this.pos = pos;
 	}
 
