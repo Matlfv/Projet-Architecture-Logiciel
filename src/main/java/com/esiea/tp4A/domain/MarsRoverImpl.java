@@ -1,31 +1,68 @@
 package com.esiea.tp4A.domain;
 
-import com.esiea.tp4A.domain.Position.FixedPosition;
+import java.text.CharacterIterator;
+import java.text.StringCharacterIterator;
 
 public class MarsRoverImpl implements MarsRover {
-	private FixedPosition pos;
+	private Position pos;
+
+	@Override
+	public MarsRover initialize(Position position) {
+		setPos(position);
+		return this;
+	}
 
 	@Override
 	public Position move(String command) {
-		switch (command) {
-		case "f":
-			return Position.of(0, 1, Direction.NORTH);
-		case "b":
-			return Position.of(0, -1, Direction.SOUTH);
-		case "l":
-			return Position.of(-1, 0, Direction.WEST);
-		case "r":
-			return Position.of(1, 0, Direction.EAST);
+		CharacterIterator it = new StringCharacterIterator(command);
+		
+		while(it.current() != CharacterIterator.DONE) {
+			computeMovement(it.current());	
+			it.next();
+		}
+		
+		return getPos();
+	}
+	
+	private void computeMovement(char c) {
+		switch (c) {
+		case 'f':
+			moveUp();
+			break;
+		case 'b':
+			moveDown();
+			break;
+		case 'l':
+			moveLeft();
+			break;
+		case 'r':
+			moveRight();
 		default:
-			return Position.of(0, 0, null);
+			break;
 		}
 	}
 
-	public FixedPosition getPos() {
+	private void moveUp() {
+		setPos(Position.of(pos.getX(), pos.getY() + 1, Direction.NORTH));
+	}
+
+	private void moveDown() {
+		setPos(Position.of(pos.getX(), pos.getY() - 1, Direction.SOUTH));
+	}
+
+	private void moveRight() {
+		setPos(Position.of(pos.getX() + 1, pos.getY(), Direction.EAST));
+	}
+
+	private void moveLeft() {
+		setPos(Position.of(pos.getX() - 1, pos.getY(), Direction.WEST));
+	}
+
+	private Position getPos() {
 		return pos;
 	}
 
-	public void setPos(FixedPosition pos) {
+	private void setPos(Position pos) {
 		this.pos = pos;
 	}
 

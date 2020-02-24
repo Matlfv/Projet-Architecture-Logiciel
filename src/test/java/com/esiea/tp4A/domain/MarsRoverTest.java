@@ -4,13 +4,13 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class MarsRoverTest {
-
+	
 	final MarsRover mr = new MarsRoverImpl().initialize(Position.of(0, 0, Direction.NORTH));
 
 	@Test
 	void testMoveForward() {
 		Assertions.assertThat(mr.move("f"))
-				.as("Rover moving forward (North)")
+				.as("Rover is moving forward (North) from origin")
 				.extracting(Position::getX, Position::getY, Position::getDirection)
 				.containsExactly(0, 1, Direction.NORTH);
 	}
@@ -18,7 +18,7 @@ public class MarsRoverTest {
 	@Test
 	void testMoveBackward() {
 		Assertions.assertThat(mr.move("b"))
-				.as("Rover moving backward (South)")
+				.as("Rover is moving backward (South) from origin")
 				.extracting(Position::getX, Position::getY, Position::getDirection)
 				.containsExactly(0, -1, Direction.SOUTH);
 	}
@@ -26,7 +26,7 @@ public class MarsRoverTest {
 	@Test
 	void testMoveRight() {
 		Assertions.assertThat(mr.move("r"))
-				.as("Rover moving right (East)")
+				.as("Rover is moving right (East) from origin")
 				.extracting(Position::getX, Position::getY, Position::getDirection)
 				.containsExactly(1, 0, Direction.EAST);
 	}
@@ -34,7 +34,7 @@ public class MarsRoverTest {
 	@Test
 	void testMoveLeft() {
 		Assertions.assertThat(mr.move("l"))
-				.as("Rover moving left (West)")
+				.as("Rover is moving left (West)")
 				.extracting(Position::getX, Position::getY, Position::getDirection)
 				.containsExactly(-1, 0, Direction.WEST);
 	}
@@ -42,8 +42,56 @@ public class MarsRoverTest {
 	@Test
 	void testMoveNowhere() {
 		Assertions.assertThat(mr.move("mmmmm"))
-		.as("Rover not moving")
+		.as("Rover is not moving from origin")
 		.extracting(Position::getX, Position::getY, Position::getDirection)
-		.containsExactly(0, 0, null);
+		.containsExactly(0, 0, Direction.NORTH);
+	}
+	
+	@Test
+	void testMultipleMovesLeft() {
+		Assertions.assertThat(mr.move("llll"))
+		.as("Rover 4 times to the left")
+		.extracting(Position::getX, Position::getY, Position::getDirection)
+		.containsExactly(-4, 0, Direction.WEST);
+	}
+	
+	@Test
+	void testMultipleMovesRight() {
+		Assertions.assertThat(mr.move("rrrr"))
+		.as("Rover 4 times to the left")
+		.extracting(Position::getX, Position::getY, Position::getDirection)
+		.containsExactly(4, 0, Direction.EAST);
+	}
+	
+	@Test
+	void testMultipleMovesForward() {
+		Assertions.assertThat(mr.move("ffff"))
+		.as("Rover 4 times to the left")
+		.extracting(Position::getX, Position::getY, Position::getDirection)
+		.containsExactly(0, 4, Direction.NORTH);
+	}
+	
+	@Test
+	void testMultipleMovesBackward() {
+		Assertions.assertThat(mr.move("bbbb"))
+		.as("Rover 4 times to the left")
+		.extracting(Position::getX, Position::getY, Position::getDirection)
+		.containsExactly(0, -4, Direction.SOUTH);
+	}
+	
+	@Test
+	void testMultipleMovements1() {
+		Assertions.assertThat(mr.move("bfbfbf"))
+		.as("Rover back and forth 3 times to the origin")
+		.extracting(Position::getX, Position::getY, Position::getDirection)
+		.containsExactly(0, 0, Direction.NORTH);
+	}
+	
+	@Test
+	void testMultipleMovements2() {
+		Assertions.assertThat(mr.move("frbl"))
+		.as("Rover move in circle to the origin")
+		.extracting(Position::getX, Position::getY, Position::getDirection)
+		.containsExactly(0, 0, Direction.WEST);
 	}
 }
