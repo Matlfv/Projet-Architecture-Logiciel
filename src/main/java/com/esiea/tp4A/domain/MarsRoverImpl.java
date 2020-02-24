@@ -30,7 +30,18 @@ public class MarsRoverImpl implements MarsRover {
 	 */
 	private void computeMovement(char c) {
 		switch (c) {
-		case 'f':
+		case 'f':>>>>>>> master
+		}
+		
+		return getPos();
+	}
+	
+	/**
+	 * Iterate every step of the command and process it
+	 * @param c
+	 */
+	private void computeMovement(char c) {
+		switch (c) {
 			moveForward(c);
 			break;
 		case 'b':
@@ -135,7 +146,7 @@ public class MarsRoverImpl implements MarsRover {
 			break;
 		};
 	}
-
+  
 	private Position getPos() {
 		return pos;
 	}
