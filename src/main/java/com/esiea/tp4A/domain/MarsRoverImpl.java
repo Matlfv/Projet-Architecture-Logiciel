@@ -23,20 +23,8 @@ public class MarsRoverImpl implements MarsRover {
 		
 		return getPos();
 	}
-	
-	/**
-	 * Iterate every step of the command and process it
-	 * @param c
-	 */
-	private void computeMovement(char c) {
-		switch (c) {
-		case 'f':>>>>>>> master
-		}
-		
-		return getPos();
-	}
-	
-	/**
+
+    /**
 	 * Iterate every step of the command and process it
 	 * @param c
 	 */
