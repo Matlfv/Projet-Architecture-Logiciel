@@ -30,6 +30,7 @@ public class MarsRoverImpl implements MarsRover {
 	 */
 	private void computeMovement(char c) {
 		switch (c) {
+		case 'f':
 			moveForward(c);
 			break;
 		case 'b':
