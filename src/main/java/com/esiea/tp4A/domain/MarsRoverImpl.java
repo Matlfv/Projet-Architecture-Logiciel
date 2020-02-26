@@ -15,154 +15,154 @@ public class MarsRoverImpl implements MarsRover {
 		return this;
 	}
 
+	/**
+	 * Return the new position of the rover
+	 */
 	@Override
 	public Position move(String command) {
 		CharacterIterator it = new StringCharacterIterator(command);
-		
-		while(it.current() != CharacterIterator.DONE) {
-			computeMovement(it.current());	
-			it.next();
+		Position initialPosition = getPos();
+		Position tempPosition = getPos();
+
+		while (it.current() != CharacterIterator.DONE) {
+			tempPosition = computeMovement(it.current());
+
+			if (checkMovement(tempPosition)) {
+				setPos(tempPosition);
+				it.next();
+			} else {
+				return initialPosition;
+			}
 		}
-		
-		return getPos();
+		return tempPosition;
 	}
 
-    /**
+	/**
 	 * Iterate every step of the command and process it
+	 * 
 	 * @param c
 	 */
-	private void computeMovement(char c) {
+	private Position computeMovement(char c) {
 		switch (c) {
 		case 'f':
-			moveForward(c);
-			break;
+			return moveForward(c);
 		case 'b':
-			moveBackward(c);
-			break;
+			return moveBackward(c);
 		case 'l':
-			rotateLeft();
-			break;
+			return rotateLeft();
 		case 'r':
-			rotateRight();
+			return rotateRight();
 		default:
-			break;
-		};
+			return getPos();
+		}
+	}
+
+	private boolean checkMovement(Position position) {
+		return true;
 	}
 
 	/**
 	 * Allow the rover to go forward depending on the direction
+	 * 
 	 * @param c
 	 */
-	private void moveForward(char c) {
-		switch(pos.getDirection()) {
+	private Position moveForward(char c) {
+		switch (pos.getDirection()) {
 		case NORTH:
-			setPos(Position.of(pos.getX(), pos.getY() + 1, Direction.NORTH));
 			if (pos.getY() > this.MAP_SIZE / 2) {
-				setPos(Position.of(pos.getX(), pos.getY() - this.MAP_SIZE, Direction.NORTH));
+				return Position.of(pos.getX(), pos.getY() - this.MAP_SIZE, Direction.NORTH);
 			}
-			break;
+			return Position.of(pos.getX(), pos.getY() + 1, Direction.NORTH);
 		case SOUTH:
-			setPos(Position.of(pos.getX(), pos.getY() - 1, Direction.SOUTH));
-			if (pos.getY() < (- this.MAP_SIZE / 2) + 1) {
-				setPos(Position.of(pos.getX(), pos.getY() + this.MAP_SIZE, Direction.SOUTH));
+			if (pos.getY() < (-this.MAP_SIZE / 2) + 1) {
+				return Position.of(pos.getX(), pos.getY() + this.MAP_SIZE, Direction.SOUTH);
 			}
-			break;
+			return Position.of(pos.getX(), pos.getY() - 1, Direction.SOUTH);
 		case EAST:
-			setPos(Position.of(pos.getX() + 1, pos.getY(), Direction.EAST));
 			if (pos.getX() > this.MAP_SIZE / 2) {
-				setPos(Position.of(pos.getX() - this.MAP_SIZE, pos.getY(), Direction.EAST));
+				return Position.of(pos.getX() - this.MAP_SIZE, pos.getY(), Direction.EAST);
 			}
-			break;
+			return Position.of(pos.getX() + 1, pos.getY(), Direction.EAST);
 		case WEST:
-			setPos(Position.of(pos.getX() - 1, pos.getY(), Direction.WEST));
-			if (pos.getX() < (- this.MAP_SIZE / 2) + 1) {
-				setPos(Position.of(pos.getX() + this.MAP_SIZE, pos.getY(), Direction.WEST));
+			if (pos.getX() < (-this.MAP_SIZE / 2) + 1) {
+				return Position.of(pos.getX() + this.MAP_SIZE, pos.getY(), Direction.WEST);
 			}
-			break;
+			return Position.of(pos.getX() - 1, pos.getY(), Direction.WEST);
 		default:
 			break;
-		};
+		}
+		;
+		return getPos();
 	}
 
 	/**
 	 * Allow the rover to go backward depending on the direction
+	 * 
 	 * @param c
 	 */
-	private void moveBackward(char c) {
-		switch(pos.getDirection()) {
+	private Position moveBackward(char c) {
+		switch (pos.getDirection()) {
 		case NORTH:
-			setPos(Position.of(pos.getX(), pos.getY() - 1, Direction.NORTH));
-			if (pos.getY() < (- this.MAP_SIZE / 2) + 1) {
-				setPos(Position.of(pos.getX(), pos.getY() + this.MAP_SIZE, Direction.NORTH));
+			if (pos.getY() < (-this.MAP_SIZE / 2) + 1) {
+				return Position.of(pos.getX(), pos.getY() + this.MAP_SIZE, Direction.NORTH);
 			}
-			break;
+			return Position.of(pos.getX(), pos.getY() - 1, Direction.NORTH);
 		case SOUTH:
-			setPos(Position.of(pos.getX(), pos.getY() + 1, Direction.SOUTH));
 			if (pos.getY() > this.MAP_SIZE / 2) {
-				setPos(Position.of(pos.getX(), pos.getY() - this.MAP_SIZE, Direction.SOUTH));
+				return Position.of(pos.getX(), pos.getY() - this.MAP_SIZE, Direction.SOUTH);
 			}
-			break;
+			return Position.of(pos.getX(), pos.getY() + 1, Direction.SOUTH);
 		case EAST:
-			setPos(Position.of(pos.getX() - 1, pos.getY(), Direction.EAST));
-			if (pos.getX() < (- this.MAP_SIZE / 2) + 1) {
-				setPos(Position.of(pos.getX() + this.MAP_SIZE, pos.getY(), Direction.EAST));
+			if (pos.getX() < (-this.MAP_SIZE / 2) + 1) {
+				return Position.of(pos.getX() + this.MAP_SIZE, pos.getY(), Direction.EAST);
 			}
-			break;
+			return Position.of(pos.getX() - 1, pos.getY(), Direction.EAST);
 		case WEST:
-			setPos(Position.of(pos.getX() + 1, pos.getY(), Direction.WEST));
 			if (pos.getX() > this.MAP_SIZE / 2) {
-				setPos(Position.of(pos.getX() - this.MAP_SIZE, pos.getY(), Direction.WEST));
+				return Position.of(pos.getX() - this.MAP_SIZE, pos.getY(), Direction.WEST);
 			}
-			break;
+			return Position.of(pos.getX() + 1, pos.getY(), Direction.WEST);
 		default:
-			break;
-		};
+			return getPos();
+		}
 	}
 
 	/**
 	 * Rotate the direction to the right
 	 */
-	private void rotateRight() {
+	private Position rotateRight() {
 		switch (pos.getDirection()) {
 		case NORTH:
-			setPos(Position.of(pos.getX(), pos.getY(), Direction.EAST));
-			break;
+			return Position.of(pos.getX(), pos.getY(), Direction.EAST);
 		case SOUTH:
-			setPos(Position.of(pos.getX(), pos.getY(), Direction.WEST));
-			break;
+			return Position.of(pos.getX(), pos.getY(), Direction.WEST);
 		case EAST:
-			setPos(Position.of(pos.getX(), pos.getY(), Direction.SOUTH));
-			break;
+			return Position.of(pos.getX(), pos.getY(), Direction.SOUTH);
 		case WEST:
-			setPos(Position.of(pos.getX(), pos.getY(), Direction.NORTH));
-			break;
+			return Position.of(pos.getX(), pos.getY(), Direction.NORTH);
 		default:
-			break;
-		};
+			return getPos();
+		}
 	}
 
 	/*
 	 * Rotate the direction to the left
 	 */
-	private void rotateLeft() {
+	private Position rotateLeft() {
 		switch (pos.getDirection()) {
 		case NORTH:
-			setPos(Position.of(pos.getX(), pos.getY(), Direction.WEST));
-			break;
+			return Position.of(pos.getX(), pos.getY(), Direction.WEST);
 		case SOUTH:
-			setPos(Position.of(pos.getX(), pos.getY(), Direction.EAST));
-			break;
+			return Position.of(pos.getX(), pos.getY(), Direction.EAST);
 		case EAST:
-			setPos(Position.of(pos.getX(), pos.getY(), Direction.NORTH));
-			break;
+			return Position.of(pos.getX(), pos.getY(), Direction.NORTH);
 		case WEST:
-			setPos(Position.of(pos.getX(), pos.getY(), Direction.SOUTH));
-			break;
+			return Position.of(pos.getX(), pos.getY(), Direction.SOUTH);
 		default:
-			break;
-		};
+			return getPos();
+		}
 	}
-  
+
 	private Position getPos() {
 		return pos;
 	}
