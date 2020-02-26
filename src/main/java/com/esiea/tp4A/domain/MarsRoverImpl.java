@@ -5,6 +5,7 @@ import java.text.StringCharacterIterator;
 
 public class MarsRoverImpl implements MarsRover {
 	private Position pos;
+	final int MAP_SIZE = 100;
 
 	@Override
 	public MarsRover initialize(Position position) {
@@ -54,15 +55,27 @@ public class MarsRoverImpl implements MarsRover {
 		switch(pos.getDirection()) {
 		case NORTH:
 			setPos(Position.of(pos.getX(), pos.getY() + 1, Direction.NORTH));
+			if (pos.getY() > this.MAP_SIZE / 2) {
+				setPos(Position.of(pos.getX(), pos.getY() - this.MAP_SIZE, Direction.NORTH));
+			}
 			break;
 		case SOUTH:
 			setPos(Position.of(pos.getX(), pos.getY() - 1, Direction.SOUTH));
+			if (pos.getY() < (- this.MAP_SIZE / 2) + 1) {
+				setPos(Position.of(pos.getX(), pos.getY() + this.MAP_SIZE, Direction.SOUTH));
+			}
 			break;
 		case EAST:
 			setPos(Position.of(pos.getX() + 1, pos.getY(), Direction.EAST));
+			if (pos.getX() > this.MAP_SIZE / 2) {
+				setPos(Position.of(pos.getX() - this.MAP_SIZE, pos.getY(), Direction.EAST));
+			}
 			break;
 		case WEST:
 			setPos(Position.of(pos.getX() - 1, pos.getY(), Direction.WEST));
+			if (pos.getX() < (- this.MAP_SIZE / 2) + 1) {
+				setPos(Position.of(pos.getX() + this.MAP_SIZE, pos.getY(), Direction.WEST));
+			}
 			break;
 		default:
 			break;
@@ -77,15 +90,27 @@ public class MarsRoverImpl implements MarsRover {
 		switch(pos.getDirection()) {
 		case NORTH:
 			setPos(Position.of(pos.getX(), pos.getY() - 1, Direction.NORTH));
+			if (pos.getY() < (- this.MAP_SIZE / 2) + 1) {
+				setPos(Position.of(pos.getX(), pos.getY() + this.MAP_SIZE, Direction.NORTH));
+			}
 			break;
 		case SOUTH:
 			setPos(Position.of(pos.getX(), pos.getY() + 1, Direction.SOUTH));
+			if (pos.getY() > this.MAP_SIZE / 2) {
+				setPos(Position.of(pos.getX(), pos.getY() - this.MAP_SIZE, Direction.SOUTH));
+			}
 			break;
 		case EAST:
 			setPos(Position.of(pos.getX() - 1, pos.getY(), Direction.EAST));
+			if (pos.getX() < (- this.MAP_SIZE / 2) + 1) {
+				setPos(Position.of(pos.getX() + this.MAP_SIZE, pos.getY(), Direction.EAST));
+			}
 			break;
 		case WEST:
 			setPos(Position.of(pos.getX() + 1, pos.getY(), Direction.WEST));
+			if (pos.getX() > this.MAP_SIZE / 2) {
+				setPos(Position.of(pos.getX() - this.MAP_SIZE, pos.getY(), Direction.WEST));
+			}
 			break;
 		default:
 			break;
