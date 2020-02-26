@@ -1,5 +1,8 @@
 package com.esiea.tp4A.domain;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -23,7 +26,7 @@ public class MarsRoverTest {
 			.initialize(Position.of(0, -49, Direction.SOUTH));
 	final MarsRover mrBottomNorth = new MarsRoverImpl()
 			.initialize(Position.of(0, -49, Direction.NORTH));
-
+	
 	@Test
 	void testMoveForwardFromOrigin() {
 		Assertions.assertThat(mr.move("f"))
@@ -174,5 +177,125 @@ public class MarsRoverTest {
 			.as("Rover move in circle to the origin")
 			.extracting(Position::getX, Position::getY, Position::getDirection)
 			.containsExactly(0, 0, Direction.NORTH);
+	}
+	
+	@Test
+	void testMoveForwardFromOriginNorthWithObstacle() {
+		MarsRover marsRover = new MarsRoverImpl()
+				.initialize(Position.of(0, 0, Direction.NORTH));
+		
+		Set<Position> set = new HashSet<Position>();
+		set.add(Position.of(0, 1, Direction.NORTH));
+		marsRover.updateMap(new PlanetMapImpl(set));
+		
+		Assertions.assertThat(marsRover.move("f"))
+			.as("Rover is moving forward (North) from origin with an obstacle")
+			.extracting(Position::getX, Position::getY, Position::getDirection)
+			.containsExactly(0, 0, Direction.NORTH);
+	}
+	
+	@Test
+	void testMoveForwardFromOriginSouthWithObstacle() {
+		MarsRover marsRover = new MarsRoverImpl()
+				.initialize(Position.of(0, 0, Direction.SOUTH));
+		
+		Set<Position> set = new HashSet<Position>();
+		set.add(Position.of(0, -1, Direction.NORTH));
+		marsRover.updateMap(new PlanetMapImpl(set));
+		
+		Assertions.assertThat(marsRover.move("f"))
+			.as("Rover is moving forward (South) from origin with an obstacle")
+			.extracting(Position::getX, Position::getY, Position::getDirection)
+			.containsExactly(0, 0, Direction.SOUTH);
+	}
+	
+	@Test
+	void testMoveForwardFromOriginWestWithObstacle() {
+		MarsRover marsRover = new MarsRoverImpl()
+				.initialize(Position.of(0, 0, Direction.WEST));
+		
+		Set<Position> set = new HashSet<Position>();
+		set.add(Position.of(-1, 0, Direction.NORTH));
+		marsRover.updateMap(new PlanetMapImpl(set));
+		
+		Assertions.assertThat(marsRover.move("f"))
+			.as("Rover is moving forward (West) from origin with an obstacle")
+			.extracting(Position::getX, Position::getY, Position::getDirection)
+			.containsExactly(0, 0, Direction.WEST);
+	}
+	
+	@Test
+	void testMoveForwardFromOriginEastWithObstacle() {
+		MarsRover marsRover = new MarsRoverImpl()
+				.initialize(Position.of(0, 0, Direction.EAST));
+		
+		Set<Position> set = new HashSet<Position>();
+		set.add(Position.of(1, 0, Direction.NORTH));
+		marsRover.updateMap(new PlanetMapImpl(set));
+		
+		Assertions.assertThat(marsRover.move("f"))
+			.as("Rover is moving forward (East) from origin with an obstacle")
+			.extracting(Position::getX, Position::getY, Position::getDirection)
+			.containsExactly(0, 0, Direction.EAST);
+	}
+	
+	@Test
+	void testMoveDownwardFromOriginNorthWithObstacle() {
+		MarsRover marsRover = new MarsRoverImpl()
+				.initialize(Position.of(0, 0, Direction.NORTH));
+		
+		Set<Position> set = new HashSet<Position>();
+		set.add(Position.of(0, -1, Direction.NORTH));
+		marsRover.updateMap(new PlanetMapImpl(set));
+		
+		Assertions.assertThat(marsRover.move("d"))
+			.as("Rover is moving downward (North) from origin with an obstacle")
+			.extracting(Position::getX, Position::getY, Position::getDirection)
+			.containsExactly(0, 0, Direction.NORTH);
+	}
+	
+	@Test
+	void testMoveDownwardFromOriginSouthWithObstacle() {
+		MarsRover marsRover = new MarsRoverImpl()
+				.initialize(Position.of(0, 0, Direction.SOUTH));
+		
+		Set<Position> set = new HashSet<Position>();
+		set.add(Position.of(0, 1, Direction.NORTH));
+		marsRover.updateMap(new PlanetMapImpl(set));
+		
+		Assertions.assertThat(marsRover.move("d"))
+			.as("Rover is moving downward (South) from origin with an obstacle")
+			.extracting(Position::getX, Position::getY, Position::getDirection)
+			.containsExactly(0, 0, Direction.SOUTH);
+	}
+	
+	@Test
+	void testMoveDownwardFromOriginWestWithObstacle() {
+		MarsRover marsRover = new MarsRoverImpl()
+				.initialize(Position.of(0, 0, Direction.WEST));
+		
+		Set<Position> set = new HashSet<Position>();
+		set.add(Position.of(1, 0, Direction.NORTH));
+		marsRover.updateMap(new PlanetMapImpl(set));
+		
+		Assertions.assertThat(marsRover.move("d"))
+			.as("Rover is moving downward (West) from origin with an obstacle")
+			.extracting(Position::getX, Position::getY, Position::getDirection)
+			.containsExactly(0, 0, Direction.WEST);
+	}
+	
+	@Test
+	void testMoveDownwardFromOriginEastWithObstacle() {
+		MarsRover marsRover = new MarsRoverImpl()
+				.initialize(Position.of(0, 0, Direction.EAST));
+		
+		Set<Position> set = new HashSet<Position>();
+		set.add(Position.of(-1, 0, Direction.NORTH));
+		marsRover.updateMap(new PlanetMapImpl(set));
+		
+		Assertions.assertThat(marsRover.move("d"))
+			.as("Rover is moving downward (East) from origin with an obstacle")
+			.extracting(Position::getX, Position::getY, Position::getDirection)
+			.containsExactly(0, 0, Direction.EAST);
 	}
 }
