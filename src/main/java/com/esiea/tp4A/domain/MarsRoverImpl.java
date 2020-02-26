@@ -5,6 +5,8 @@ import java.text.StringCharacterIterator;
 
 public class MarsRoverImpl implements MarsRover {
 	private Position pos;
+	public boolean alive;
+	public String name;
 	final int MAP_SIZE = 100;
 
 	@Override
