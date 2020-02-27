@@ -36,16 +36,17 @@ public class MarsRoverImpl implements MarsRover {
 	@Override
 	public Position move(String command) {
 		CharacterIterator it = new StringCharacterIterator(command);
-		Position initialPosition = getPos();
-		Position tempPosition = getPos();
+		Position initialPosition = this.getPos();
+		Position tempPosition = this.getPos();
 
 		while (it.current() != CharacterIterator.DONE) {
-			tempPosition = computeMovement(it.current());
+			tempPosition = this.computeMovement(it.current());
 
-			if (checkMovement(tempPosition)) {
-				setPos(tempPosition);
+			if (this.checkMovement(tempPosition)) {
+				this.setPos(tempPosition);
 				it.next();
 			} else {
+				this.setPos(initialPosition);
 				return initialPosition;
 			}
 		}
@@ -60,85 +61,159 @@ public class MarsRoverImpl implements MarsRover {
 	private Position computeMovement(char c) {
 		switch (c) {
 		case 'f':
-			return moveForward(c);
+			return this.moveForward();
 		case 'b':
-			return moveBackward(c);
+			return this.moveBackward();
 		case 'l':
-			return rotateLeft();
+			return this.rotateLeft();
 		case 'r':
-			return rotateRight();
+			return this.rotateRight();
 		default:
-			return getPos();
+			return this.getPos();
 		}
 	}
 
+	/*
+	 * Checks if given position is not already in use by an obstacle
+	 * @return true if there is no obstacle, false otherwise 
+	 */
 	private boolean checkMovement(Position position) {
+		for (Iterator<Position> it = this.getPlanetMap()
+				.obstaclePositions()
+				.iterator(); it.hasNext();
+		) {
+	        Position p = it.next();
+	        if (p.getX() == position.getX() && p.getY() == position.getY()) {
+	            return false;
+	        }
+	    }
+		
 		return true;
 	}
 
 	/**
 	 * Allow the rover to go forward depending on the direction
-	 * 
-	 * @param c
 	 */
-	private Position moveForward(char c) {
-		switch (pos.getDirection()) {
+	private Position moveForward() {
+		switch (this.pos.getDirection()) {
 		case NORTH:
-			if (pos.getY() > this.MAP_SIZE / 2) {
-				return Position.of(pos.getX(), pos.getY() - this.MAP_SIZE, Direction.NORTH);
+			if (this.pos.getY()+1 > this.getPlanetMap().getPlanetMapSize()/2) {
+				return Position.of(
+					this.pos.getX(),
+					this.pos.getY()+1 - this.getPlanetMap().getPlanetMapSize(),
+					Direction.NORTH
+				);
 			}
-			return Position.of(pos.getX(), pos.getY() + 1, Direction.NORTH);
+			return Position.of(
+				this.pos.getX(),
+				this.pos.getY() + 1,
+				Direction.NORTH
+			);
 		case SOUTH:
-			if (pos.getY() < (-this.MAP_SIZE / 2) + 1) {
-				return Position.of(pos.getX(), pos.getY() + this.MAP_SIZE, Direction.SOUTH);
+			if (this.pos.getY()-1 < (-this.getPlanetMap().getPlanetMapSize()/2)+1) {
+				return Position.of(
+					this.pos.getX(),
+					this.pos.getY()-1 + this.getPlanetMap().getPlanetMapSize(),
+					Direction.SOUTH
+				);
 			}
-			return Position.of(pos.getX(), pos.getY() - 1, Direction.SOUTH);
+			return Position.of(
+				this.pos.getX(),
+				this.pos.getY() - 1,
+				Direction.SOUTH
+			);
 		case EAST:
-			if (pos.getX() > this.MAP_SIZE / 2) {
-				return Position.of(pos.getX() - this.MAP_SIZE, pos.getY(), Direction.EAST);
+			if (this.pos.getX()+1 > this.getPlanetMap().getPlanetMapSize() / 2) {
+				return Position.of(
+					this.pos.getX()+1 - this.getPlanetMap().getPlanetMapSize(),
+					this.pos.getY(),
+					Direction.EAST
+				);
 			}
-			return Position.of(pos.getX() + 1, pos.getY(), Direction.EAST);
+			return Position.of(
+				this.pos.getX() + 1,
+				this.pos.getY(),
+				Direction.EAST
+			);
 		case WEST:
-			if (pos.getX() < (-this.MAP_SIZE / 2) + 1) {
-				return Position.of(pos.getX() + this.MAP_SIZE, pos.getY(), Direction.WEST);
+			if (this.pos.getX()-1 < (-this.getPlanetMap().getPlanetMapSize()/2)+1) {
+				return Position.of(
+					this.pos.getX()-1 + this.getPlanetMap().getPlanetMapSize(),
+					this.pos.getY(),
+					Direction.WEST
+				);
 			}
-			return Position.of(pos.getX() - 1, pos.getY(), Direction.WEST);
+			return Position.of(
+				this.pos.getX() - 1,
+				this.pos.getY(),
+				Direction.WEST
+			);
 		default:
 			break;
 		}
 		;
-		return getPos();
+		return this.getPos();
 	}
 
 	/**
 	 * Allow the rover to go backward depending on the direction
-	 * 
-	 * @param c
 	 */
-	private Position moveBackward(char c) {
-		switch (pos.getDirection()) {
+	private Position moveBackward() {
+		switch (this.pos.getDirection()) {
 		case NORTH:
-			if (pos.getY() < (-this.MAP_SIZE / 2) + 1) {
-				return Position.of(pos.getX(), pos.getY() + this.MAP_SIZE, Direction.NORTH);
+			if (this.pos.getY()-1 < (-this.getPlanetMap().getPlanetMapSize()/2)+1) {
+				return Position.of(
+					this.pos.getX(),
+					this.pos.getY()-1 + this.getPlanetMap().getPlanetMapSize(),
+					Direction.NORTH
+				);
 			}
-			return Position.of(pos.getX(), pos.getY() - 1, Direction.NORTH);
+			return Position.of(
+				this.pos.getX(),
+				this.pos.getY() - 1,
+				Direction.NORTH
+			);
 		case SOUTH:
-			if (pos.getY() > this.MAP_SIZE / 2) {
-				return Position.of(pos.getX(), pos.getY() - this.MAP_SIZE, Direction.SOUTH);
+			if (pos.getY()+1 > this.getPlanetMap().getPlanetMapSize() / 2) {
+				return Position.of(
+					this.pos.getX(),
+					this.pos.getY()+1 - this.getPlanetMap().getPlanetMapSize(),
+					Direction.SOUTH
+				);
 			}
-			return Position.of(pos.getX(), pos.getY() + 1, Direction.SOUTH);
+			return Position.of(
+				this.pos.getX(),
+				this.pos.getY() + 1,
+				Direction.SOUTH
+			);
 		case EAST:
-			if (pos.getX() < (-this.MAP_SIZE / 2) + 1) {
-				return Position.of(pos.getX() + this.MAP_SIZE, pos.getY(), Direction.EAST);
+			if (pos.getX()-1 < (-this.getPlanetMap().getPlanetMapSize()/2)+1) {
+				return Position.of(
+					this.pos.getX()-1 + this.getPlanetMap().getPlanetMapSize(),
+					pos.getY(),
+					Direction.EAST
+				);
 			}
-			return Position.of(pos.getX() - 1, pos.getY(), Direction.EAST);
+			return Position.of(
+				this.pos.getX() - 1,
+				this.pos.getY(),
+				Direction.EAST
+			);
 		case WEST:
-			if (pos.getX() > this.MAP_SIZE / 2) {
-				return Position.of(pos.getX() - this.MAP_SIZE, pos.getY(), Direction.WEST);
+			if (this.pos.getX()+1 > this.getPlanetMap().getPlanetMapSize() / 2) {
+				return Position.of(
+					this.pos.getX()+1 - this.getPlanetMap().getPlanetMapSize(),
+					this.pos.getY(),
+					Direction.WEST
+				);
 			}
-			return Position.of(pos.getX() + 1, pos.getY(), Direction.WEST);
+			return Position.of(
+				this.pos.getX() + 1,
+				this.pos.getY(),
+				Direction.WEST
+			);
 		default:
-			return getPos();
+			return this.getPos();
 		}
 	}
 
@@ -146,17 +221,33 @@ public class MarsRoverImpl implements MarsRover {
 	 * Rotate the direction to the right
 	 */
 	private Position rotateRight() {
-		switch (pos.getDirection()) {
+		switch (this.pos.getDirection()) {
 		case NORTH:
-			return Position.of(pos.getX(), pos.getY(), Direction.EAST);
+			return Position.of(
+				this.pos.getX(),
+				this.pos.getY(),
+				Direction.EAST
+			);
 		case SOUTH:
-			return Position.of(pos.getX(), pos.getY(), Direction.WEST);
+			return Position.of(
+				this.pos.getX(),
+				this.pos.getY(),
+				Direction.WEST
+			);
 		case EAST:
-			return Position.of(pos.getX(), pos.getY(), Direction.SOUTH);
+			return Position.of(
+				this.pos.getX(),
+				this.pos.getY(),
+				Direction.SOUTH
+			);
 		case WEST:
-			return Position.of(pos.getX(), pos.getY(), Direction.NORTH);
+			return Position.of(
+				this.pos.getX(),
+				this.pos.getY(),
+				Direction.NORTH
+			);
 		default:
-			return getPos();
+			return this.getPos();
 		}
 	}
 
@@ -164,17 +255,33 @@ public class MarsRoverImpl implements MarsRover {
 	 * Rotate the direction to the left
 	 */
 	private Position rotateLeft() {
-		switch (pos.getDirection()) {
+		switch (this.pos.getDirection()) {
 		case NORTH:
-			return Position.of(pos.getX(), pos.getY(), Direction.WEST);
+			return Position.of(
+				this.pos.getX(), 
+				this.pos.getY(),
+				Direction.WEST
+			);
 		case SOUTH:
-			return Position.of(pos.getX(), pos.getY(), Direction.EAST);
+			return Position.of(
+				this.pos.getX(), 
+				this.pos.getY(),
+				Direction.EAST
+			);
 		case EAST:
-			return Position.of(pos.getX(), pos.getY(), Direction.NORTH);
+			return Position.of(
+				this.pos.getX(), 
+				this.pos.getY(),
+				Direction.NORTH
+			);
 		case WEST:
-			return Position.of(pos.getX(), pos.getY(), Direction.SOUTH);
+			return Position.of(
+				this.pos.getX(), 
+				this.pos.getY(),
+				Direction.SOUTH
+			);
 		default:
-			return getPos();
+			return this.getPos();
 		}
 	}
 
@@ -196,169 +303,5 @@ public class MarsRoverImpl implements MarsRover {
 	
 	private PlanetMap getPlanetMap() {
 		return this.planetMap;
-	}
-	
-	/*
-	 * Determines if the cell front of rover is an obstacle
-	 * 
-	 * @return true if an obstacle is front of rover, false otherwise
-	 */
-	private boolean isNextCellEmpty() {
-		Position position = null;
-		
-		switch(this.pos.getDirection()) {
-		case NORTH:
-			position = Position.of(
-				this.pos.getX(),
-				this.pos.getY() + 1,
-				Direction.NORTH
-			);
-			if (position.getY() > this.planetMap.getPlanetMapSize() / 2) {
-				position = Position.of(
-					position.getX(),
-					position.getY() - this.planetMap.getPlanetMapSize(),
-					Direction.NORTH
-				);
-			}
-			break;
-		case SOUTH:
-			position = Position.of(
-				this.pos.getX(),
-				this.pos.getY() - 1,
-				Direction.SOUTH
-			);
-			if (position.getY() < (-this.planetMap.getPlanetMapSize()/2)+1) {
-				position = Position.of(
-					position.getX(),
-					position.getY() + this.planetMap.getPlanetMapSize(),
-					Direction.SOUTH
-				);
-			}
-			break;
-		case EAST:
-			position = Position.of(
-				this.pos.getX() + 1,
-				this.pos.getY(),
-				Direction.EAST
-			);
-			if (position.getX() > this.planetMap.getPlanetMapSize() / 2) {
-				position = Position.of(
-					position.getX() - this.planetMap.getPlanetMapSize(),
-					position.getY(),
-					Direction.EAST
-				);
-			}
-			break;
-		case WEST:
-			position = Position.of(
-				this.pos.getX() - 1,
-				this.pos.getY(),
-				Direction.WEST
-			);
-			if (position.getX() < (- this.planetMap.getPlanetMapSize()/2)+1) {
-				position = Position.of(
-					position.getX() + this.planetMap.getPlanetMapSize(),
-					position.getY(),
-					Direction.WEST
-				);
-			}
-			break;
-		default:
-			break;
-		};
-		
-		for (Iterator<Position> it = this.getPlanetMap()
-				.obstaclePositions()
-				.iterator(); it.hasNext();
-		) {
-	        Position p = it.next();
-	        if (p.getX() == position.getX() && p.getY() == position.getY()) {
-	            return false;
-	        }
-	    }
-		
-		return true;
-	}
-	
-	/*
-	 * Determines if the cell behind rover is an obstacle
-	 * 
-	 * @return true if an obstacle is behind of rover, false otherwise
-	 */
-	private boolean isPreviousCellEmpty() {
-		Position position = null;
-		
-		switch(this.pos.getDirection()) {
-		case NORTH:
-			position = Position.of(
-				this.pos.getX(),
-				this.pos.getY() - 1,
-				Direction.NORTH
-			);
-			if (position.getY() < (- this.planetMap.getPlanetMapSize()/2)+1) {
-				position = Position.of(
-					position.getX(),
-					position.getY() + this.planetMap.getPlanetMapSize(),
-					Direction.NORTH
-				);
-			}
-			break;
-		case SOUTH:
-			position = Position.of(
-				this.pos.getX(),
-				this.pos.getY() + 1,
-				Direction.SOUTH
-			);
-			if (position.getY() > this.planetMap.getPlanetMapSize() / 2) {
-				position = Position.of(
-					position.getX(),
-					position.getY() - this.planetMap.getPlanetMapSize(),
-					Direction.SOUTH
-				);
-			}
-			break;
-		case EAST:
-			position = Position.of(
-				this.pos.getX() - 1,
-				this.pos.getY(),
-				Direction.EAST
-			);
-			if (position.getX() < (- this.planetMap.getPlanetMapSize()/2)+1) {
-				position = Position.of(
-					position.getX() + this.planetMap.getPlanetMapSize(),
-					position.getY(),
-					Direction.EAST
-				);
-			}
-			break;
-		case WEST:
-			position = Position.of(
-				this.pos.getX() + 1,
-				this.pos.getY(),
-				Direction.WEST
-			);
-			if (position.getX() > this.planetMap.getPlanetMapSize() / 2) {
-				position = Position.of(
-					position.getX() - this.planetMap.getPlanetMapSize(),
-					position.getY(),
-					Direction.WEST
-				);
-			}
-			break;
-		default:
-			break;
-		};
-		
-		for (Iterator<Position> it = this.getPlanetMap()
-				.obstaclePositions()
-				.iterator(); it.hasNext();
-		) {
-	        Position p = it.next();
-	        if (p.getX() == position.getX() && p.getY() == position.getY()) {
-	            return false;
-	        }
-	    }
-		
-		return true;
 	}
 }

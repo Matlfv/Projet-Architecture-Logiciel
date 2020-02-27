@@ -248,8 +248,8 @@ public class MarsRoverTest {
 		set.add(Position.of(0, -1, Direction.NORTH));
 		marsRover.updateMap(new PlanetMapImpl(set));
 		
-		Assertions.assertThat(marsRover.move("d"))
-			.as("Rover is moving downward (North) from origin with an obstacle")
+		Assertions.assertThat(marsRover.move("b"))
+			.as("Rover is moving backward (North) from origin with an obstacle")
 			.extracting(Position::getX, Position::getY, Position::getDirection)
 			.containsExactly(0, 0, Direction.NORTH);
 	}
@@ -263,8 +263,8 @@ public class MarsRoverTest {
 		set.add(Position.of(0, 1, Direction.NORTH));
 		marsRover.updateMap(new PlanetMapImpl(set));
 		
-		Assertions.assertThat(marsRover.move("d"))
-			.as("Rover is moving downward (South) from origin with an obstacle")
+		Assertions.assertThat(marsRover.move("b"))
+			.as("Rover is moving backward (South) from origin with an obstacle")
 			.extracting(Position::getX, Position::getY, Position::getDirection)
 			.containsExactly(0, 0, Direction.SOUTH);
 	}
@@ -278,8 +278,8 @@ public class MarsRoverTest {
 		set.add(Position.of(1, 0, Direction.NORTH));
 		marsRover.updateMap(new PlanetMapImpl(set));
 		
-		Assertions.assertThat(marsRover.move("d"))
-			.as("Rover is moving downward (West) from origin with an obstacle")
+		Assertions.assertThat(marsRover.move("b"))
+			.as("Rover is moving backward (West) from origin with an obstacle")
 			.extracting(Position::getX, Position::getY, Position::getDirection)
 			.containsExactly(0, 0, Direction.WEST);
 	}
@@ -293,8 +293,8 @@ public class MarsRoverTest {
 		set.add(Position.of(-1, 0, Direction.NORTH));
 		marsRover.updateMap(new PlanetMapImpl(set));
 		
-		Assertions.assertThat(marsRover.move("d"))
-			.as("Rover is moving downward (East) from origin with an obstacle")
+		Assertions.assertThat(marsRover.move("b"))
+			.as("Rover is moving backward (East) from origin with an obstacle")
 			.extracting(Position::getX, Position::getY, Position::getDirection)
 			.containsExactly(0, 0, Direction.EAST);
 	}
