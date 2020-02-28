@@ -16,4 +16,8 @@ public interface MarsRover {
 	default Position move(String command) {
 		return Position.of(0, 0, Direction.NORTH);
 	}
+	
+	default Position shoot() {
+		return Position.of(0,  0, Direction.NORTH);
+	}
 }

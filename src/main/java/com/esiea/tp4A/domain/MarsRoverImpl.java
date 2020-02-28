@@ -4,17 +4,30 @@ import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
 public class MarsRoverImpl implements MarsRover {
 	private Position pos;
 	private PlanetMap planetMap;
 	private int laserRange;
 	
+	public MarsRoverImpl() {
+		this.pos = Position.of(0, 0, Direction.NORTH);
+		this.planetMap = new PlanetMapImpl(new HashSet<Position>());
+		this.laserRange = 5;
+	}
+	
+	public MarsRoverImpl(Position pos, PlanetMap pm, int laserRange) {
+		this.pos = pos;
+		this.planetMap = pm;
+		this.laserRange = laserRange;
+	}
+	
 	@Override
 	public MarsRover initialize(Position position) {
 		this.setPos(position);
 		this.setPlanetMap(new PlanetMapImpl(new HashSet<Position>()));
-		this.setLaserRange(0);
+		this.setLaserRange(5);
 		return this;
 	}
 	
@@ -53,6 +66,80 @@ public class MarsRoverImpl implements MarsRover {
 		return tempPosition;
 	}
 
+	/*
+	 * Destroys an obstacle front of hover
+	 * 
+	 * @return position of destroyed obstacle or hover position if no obstacle
+	 * was destroyed
+	 */
+	@Override
+	public Position shoot() {
+		Set<Position> set = new HashSet<Position>();
+		
+		switch (this.pos.getDirection()) {
+		case NORTH:
+			for (int i = 1; i <= this.getLaserRange(); i++) {
+				set.add(Position.of(
+					this.pos.getX(),
+					this.pos.getY()+i > this.getPlanetMap().getPlanetMapSize()/2
+						? this.pos.getY()+i - this.getPlanetMap().getPlanetMapSize()
+						: this.pos.getY()+i,
+					Direction.NORTH
+				));
+			}
+		case SOUTH:
+			for (int i = 1; i <= this.getLaserRange(); i++) {
+				set.add(Position.of(
+					this.pos.getX(),
+					this.pos.getY()-i < (-this.getPlanetMap().getPlanetMapSize()/2)+1
+						? this.pos.getY()-i + this.getPlanetMap().getPlanetMapSize()
+						: this.pos.getY()-i,
+					Direction.SOUTH
+				));
+			}
+		case EAST:
+			for (int i = 1; i <= this.getLaserRange(); i++) {
+				set.add(Position.of(
+					this.pos.getX()+i > this.getPlanetMap().getPlanetMapSize() / 2
+						? this.pos.getX()+i - this.getPlanetMap().getPlanetMapSize()
+						: this.pos.getX()+i,
+					this.pos.getY(),
+					Direction.EAST
+				));
+			}
+		case WEST:
+			for (int i = 1; i <= this.getLaserRange(); i++) {
+				set.add(Position.of(
+					this.pos.getX()-1 < (-this.getPlanetMap().getPlanetMapSize()/2)+1
+						? this.pos.getX()-1 + this.getPlanetMap().getPlanetMapSize()
+						: this.pos.getX()-i,
+					this.pos.getY(),
+					Direction.WEST
+				));
+			}
+		default:
+			break;
+		}
+		
+		for (Iterator<Position> itSet = set.iterator(); itSet.hasNext();) {
+			Position position = itSet.next();
+			for (Iterator<Position> it = this.getPlanetMap()
+					.obstaclePositions()
+					.iterator(); it.hasNext();
+			) {
+		        Position p = it.next();
+		        if (p.getX() == position.getX() 
+		        	&& p.getY() == position.getY()
+		        ) {
+		        	this.getPlanetMap().obstaclePositions().remove(p);
+		            return position;
+		        }
+		    }
+		}
+		
+		return this.getPos();
+	}	
+	
 	/**
 	 * Iterate every step of the command and process it
 	 * 
@@ -151,7 +238,7 @@ public class MarsRoverImpl implements MarsRover {
 		default:
 			break;
 		}
-		;
+		
 		return this.getPos();
 	}
 
@@ -285,7 +372,7 @@ public class MarsRoverImpl implements MarsRover {
 		}
 	}
 
-	private Position getPos() {
+	public Position getPos() {
 		return this.pos;
 	}
 
@@ -297,11 +384,15 @@ public class MarsRoverImpl implements MarsRover {
 		this.laserRange = laserRange;
 	}
 	
+	public int getLaserRange() {
+		return this.laserRange;
+	}
+	
 	private void setPlanetMap(PlanetMap planetMap) {
 		this.planetMap = planetMap;
 	}
 	
-	private PlanetMap getPlanetMap() {
+	public PlanetMap getPlanetMap() {
 		return this.planetMap;
 	}
 }
