@@ -9,7 +9,9 @@ import org.junit.jupiter.api.Test;
 public class MarsRoverTest {
 	
 	final MarsRover mr = new MarsRoverImpl()
-			.initialize(Position.of(0, 0, Direction.NORTH));	
+			.initialize(Position.of(0, 0, Direction.NORTH));
+	final MarsRover mrIssue23 = new MarsRoverImpl()
+			.initialize(Position.of(4, 4, Direction.SOUTH));
 	final MarsRover mrRightEast = new MarsRoverImpl().
 			initialize(Position.of(50, 0, Direction.EAST));
 	final MarsRover mrRightWest = new MarsRoverImpl()
@@ -297,5 +299,18 @@ public class MarsRoverTest {
 			.as("Rover is moving backward (East) from origin with an obstacle")
 			.extracting(Position::getX, Position::getY, Position::getDirection)
 			.containsExactly(0, 0, Direction.EAST);
+	}
+	
+	@Test
+	void testIssue23() {
+		Set<Position> set = new HashSet<Position>();
+		set.add(Position.of(4, 5, Direction.NORTH));
+		set.add(Position.of(5, 4, Direction.NORTH));
+		mrIssue23.updateMap(new PlanetMapImpl(set));
+		
+		Assertions.assertThat(mrIssue23.move("bllfrb"))
+			.as("Rover is moving following the issue23 of github")
+			.extracting(Position::getX, Position::getY, Position::getDirection)
+			.containsExactly(3, 4, Direction.EAST);
 	}
 }
