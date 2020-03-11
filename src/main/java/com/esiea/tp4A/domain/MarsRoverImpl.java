@@ -9,7 +9,7 @@ public class MarsRoverImpl implements MarsRover {
 	private Position pos;
 	private PlanetMap planetMap;
 	private int laserRange;
-	
+
 	@Override
 	public MarsRover initialize(Position position) {
 		this.setPos(position);
@@ -17,13 +17,13 @@ public class MarsRoverImpl implements MarsRover {
 		this.setLaserRange(0);
 		return this;
 	}
-	
+
 	@Override
 	public MarsRover updateMap(PlanetMap map) {
 		this.setPlanetMap(map);
 		return this;
 	}
-	
+
 	@Override
 	public MarsRover configureLaserRange(int range) {
 		this.setLaserRange(range);
@@ -36,21 +36,15 @@ public class MarsRoverImpl implements MarsRover {
 	@Override
 	public Position move(String command) {
 		CharacterIterator it = new StringCharacterIterator(command);
-		Position initialPosition = this.getPos();
-		Position tempPosition = this.getPos();
-
+		Position tempPosition;
 		while (it.current() != CharacterIterator.DONE) {
 			tempPosition = this.computeMovement(it.current());
-
 			if (this.checkMovement(tempPosition)) {
 				this.setPos(tempPosition);
-				it.next();
-			} else {
-				this.setPos(initialPosition);
-				return initialPosition;
 			}
+			it.next();
 		}
-		return tempPosition;
+		return getPos();
 	}
 
 	/**
@@ -75,19 +69,17 @@ public class MarsRoverImpl implements MarsRover {
 
 	/*
 	 * Checks if given position is not already in use by an obstacle
-	 * @return true if there is no obstacle, false otherwise 
+	 * 
+	 * @return true if there is no obstacle, false otherwise
 	 */
 	private boolean checkMovement(Position position) {
-		for (Iterator<Position> it = this.getPlanetMap()
-				.obstaclePositions()
-				.iterator(); it.hasNext();
-		) {
-	        Position p = it.next();
-	        if (p.getX() == position.getX() && p.getY() == position.getY()) {
-	            return false;
-	        }
-	    }
-		
+		for (Iterator<Position> it = this.getPlanetMap().obstaclePositions().iterator(); it.hasNext();) {
+			Position p = it.next();
+			if (p.getX() == position.getX() && p.getY() == position.getY()) {
+				return false;
+			}
+		}
+
 		return true;
 	}
 
@@ -97,57 +89,29 @@ public class MarsRoverImpl implements MarsRover {
 	private Position moveForward() {
 		switch (this.pos.getDirection()) {
 		case NORTH:
-			if (this.pos.getY()+1 > this.getPlanetMap().getPlanetMapSize()/2) {
-				return Position.of(
-					this.pos.getX(),
-					this.pos.getY()+1 - this.getPlanetMap().getPlanetMapSize(),
-					Direction.NORTH
-				);
+			if (this.pos.getY() + 1 > this.getPlanetMap().getPlanetMapSize() / 2) {
+				return Position.of(this.pos.getX(), this.pos.getY() + 1 - this.getPlanetMap().getPlanetMapSize(),
+						Direction.NORTH);
 			}
-			return Position.of(
-				this.pos.getX(),
-				this.pos.getY() + 1,
-				Direction.NORTH
-			);
+			return Position.of(this.pos.getX(), this.pos.getY() + 1, Direction.NORTH);
 		case SOUTH:
-			if (this.pos.getY()-1 < (-this.getPlanetMap().getPlanetMapSize()/2)+1) {
-				return Position.of(
-					this.pos.getX(),
-					this.pos.getY()-1 + this.getPlanetMap().getPlanetMapSize(),
-					Direction.SOUTH
-				);
+			if (this.pos.getY() - 1 < (-this.getPlanetMap().getPlanetMapSize() / 2) + 1) {
+				return Position.of(this.pos.getX(), this.pos.getY() - 1 + this.getPlanetMap().getPlanetMapSize(),
+						Direction.SOUTH);
 			}
-			return Position.of(
-				this.pos.getX(),
-				this.pos.getY() - 1,
-				Direction.SOUTH
-			);
+			return Position.of(this.pos.getX(), this.pos.getY() - 1, Direction.SOUTH);
 		case EAST:
-			if (this.pos.getX()+1 > this.getPlanetMap().getPlanetMapSize() / 2) {
-				return Position.of(
-					this.pos.getX()+1 - this.getPlanetMap().getPlanetMapSize(),
-					this.pos.getY(),
-					Direction.EAST
-				);
+			if (this.pos.getX() + 1 > this.getPlanetMap().getPlanetMapSize() / 2) {
+				return Position.of(this.pos.getX() + 1 - this.getPlanetMap().getPlanetMapSize(), this.pos.getY(),
+						Direction.EAST);
 			}
-			return Position.of(
-				this.pos.getX() + 1,
-				this.pos.getY(),
-				Direction.EAST
-			);
+			return Position.of(this.pos.getX() + 1, this.pos.getY(), Direction.EAST);
 		case WEST:
-			if (this.pos.getX()-1 < (-this.getPlanetMap().getPlanetMapSize()/2)+1) {
-				return Position.of(
-					this.pos.getX()-1 + this.getPlanetMap().getPlanetMapSize(),
-					this.pos.getY(),
-					Direction.WEST
-				);
+			if (this.pos.getX() - 1 < (-this.getPlanetMap().getPlanetMapSize() / 2) + 1) {
+				return Position.of(this.pos.getX() - 1 + this.getPlanetMap().getPlanetMapSize(), this.pos.getY(),
+						Direction.WEST);
 			}
-			return Position.of(
-				this.pos.getX() - 1,
-				this.pos.getY(),
-				Direction.WEST
-			);
+			return Position.of(this.pos.getX() - 1, this.pos.getY(), Direction.WEST);
 		default:
 			break;
 		}
@@ -161,57 +125,29 @@ public class MarsRoverImpl implements MarsRover {
 	private Position moveBackward() {
 		switch (this.pos.getDirection()) {
 		case NORTH:
-			if (this.pos.getY()-1 < (-this.getPlanetMap().getPlanetMapSize()/2)+1) {
-				return Position.of(
-					this.pos.getX(),
-					this.pos.getY()-1 + this.getPlanetMap().getPlanetMapSize(),
-					Direction.NORTH
-				);
+			if (this.pos.getY() - 1 < (-this.getPlanetMap().getPlanetMapSize() / 2) + 1) {
+				return Position.of(this.pos.getX(), this.pos.getY() - 1 + this.getPlanetMap().getPlanetMapSize(),
+						Direction.NORTH);
 			}
-			return Position.of(
-				this.pos.getX(),
-				this.pos.getY() - 1,
-				Direction.NORTH
-			);
+			return Position.of(this.pos.getX(), this.pos.getY() - 1, Direction.NORTH);
 		case SOUTH:
-			if (pos.getY()+1 > this.getPlanetMap().getPlanetMapSize() / 2) {
-				return Position.of(
-					this.pos.getX(),
-					this.pos.getY()+1 - this.getPlanetMap().getPlanetMapSize(),
-					Direction.SOUTH
-				);
+			if (pos.getY() + 1 > this.getPlanetMap().getPlanetMapSize() / 2) {
+				return Position.of(this.pos.getX(), this.pos.getY() + 1 - this.getPlanetMap().getPlanetMapSize(),
+						Direction.SOUTH);
 			}
-			return Position.of(
-				this.pos.getX(),
-				this.pos.getY() + 1,
-				Direction.SOUTH
-			);
+			return Position.of(this.pos.getX(), this.pos.getY() + 1, Direction.SOUTH);
 		case EAST:
-			if (pos.getX()-1 < (-this.getPlanetMap().getPlanetMapSize()/2)+1) {
-				return Position.of(
-					this.pos.getX()-1 + this.getPlanetMap().getPlanetMapSize(),
-					pos.getY(),
-					Direction.EAST
-				);
+			if (pos.getX() - 1 < (-this.getPlanetMap().getPlanetMapSize() / 2) + 1) {
+				return Position.of(this.pos.getX() - 1 + this.getPlanetMap().getPlanetMapSize(), pos.getY(),
+						Direction.EAST);
 			}
-			return Position.of(
-				this.pos.getX() - 1,
-				this.pos.getY(),
-				Direction.EAST
-			);
+			return Position.of(this.pos.getX() - 1, this.pos.getY(), Direction.EAST);
 		case WEST:
-			if (this.pos.getX()+1 > this.getPlanetMap().getPlanetMapSize() / 2) {
-				return Position.of(
-					this.pos.getX()+1 - this.getPlanetMap().getPlanetMapSize(),
-					this.pos.getY(),
-					Direction.WEST
-				);
+			if (this.pos.getX() + 1 > this.getPlanetMap().getPlanetMapSize() / 2) {
+				return Position.of(this.pos.getX() + 1 - this.getPlanetMap().getPlanetMapSize(), this.pos.getY(),
+						Direction.WEST);
 			}
-			return Position.of(
-				this.pos.getX() + 1,
-				this.pos.getY(),
-				Direction.WEST
-			);
+			return Position.of(this.pos.getX() + 1, this.pos.getY(), Direction.WEST);
 		default:
 			return this.getPos();
 		}
@@ -223,29 +159,13 @@ public class MarsRoverImpl implements MarsRover {
 	private Position rotateRight() {
 		switch (this.pos.getDirection()) {
 		case NORTH:
-			return Position.of(
-				this.pos.getX(),
-				this.pos.getY(),
-				Direction.EAST
-			);
+			return Position.of(this.pos.getX(), this.pos.getY(), Direction.EAST);
 		case SOUTH:
-			return Position.of(
-				this.pos.getX(),
-				this.pos.getY(),
-				Direction.WEST
-			);
+			return Position.of(this.pos.getX(), this.pos.getY(), Direction.WEST);
 		case EAST:
-			return Position.of(
-				this.pos.getX(),
-				this.pos.getY(),
-				Direction.SOUTH
-			);
+			return Position.of(this.pos.getX(), this.pos.getY(), Direction.SOUTH);
 		case WEST:
-			return Position.of(
-				this.pos.getX(),
-				this.pos.getY(),
-				Direction.NORTH
-			);
+			return Position.of(this.pos.getX(), this.pos.getY(), Direction.NORTH);
 		default:
 			return this.getPos();
 		}
@@ -257,29 +177,13 @@ public class MarsRoverImpl implements MarsRover {
 	private Position rotateLeft() {
 		switch (this.pos.getDirection()) {
 		case NORTH:
-			return Position.of(
-				this.pos.getX(), 
-				this.pos.getY(),
-				Direction.WEST
-			);
+			return Position.of(this.pos.getX(), this.pos.getY(), Direction.WEST);
 		case SOUTH:
-			return Position.of(
-				this.pos.getX(), 
-				this.pos.getY(),
-				Direction.EAST
-			);
+			return Position.of(this.pos.getX(), this.pos.getY(), Direction.EAST);
 		case EAST:
-			return Position.of(
-				this.pos.getX(), 
-				this.pos.getY(),
-				Direction.NORTH
-			);
+			return Position.of(this.pos.getX(), this.pos.getY(), Direction.NORTH);
 		case WEST:
-			return Position.of(
-				this.pos.getX(), 
-				this.pos.getY(),
-				Direction.SOUTH
-			);
+			return Position.of(this.pos.getX(), this.pos.getY(), Direction.SOUTH);
 		default:
 			return this.getPos();
 		}
@@ -296,11 +200,11 @@ public class MarsRoverImpl implements MarsRover {
 	private void setLaserRange(int laserRange) {
 		this.laserRange = laserRange;
 	}
-	
+
 	private void setPlanetMap(PlanetMap planetMap) {
 		this.planetMap = planetMap;
 	}
-	
+
 	private PlanetMap getPlanetMap() {
 		return this.planetMap;
 	}
