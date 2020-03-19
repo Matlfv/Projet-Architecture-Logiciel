@@ -1,22 +1,22 @@
-<h1>System Update</h1><hr>
-To keep the game interesting, we update the game every 15 days and add a bonus.<br>
-As a bonus, we can consider adding features like the following :<br>
+<h1>Mise à jour du système</h1><hr>
+pour garder le jeu intéressant, nous mettons à jour le jeu tous les 15 jours et ajoutons un bonus.<br>
+En prime, nous pouvons envisager d'ajouter des fonctionnalités comme les suivantes :<br>
 <ul>
-<li>The radius of the radar is extended by some percentage</li>
-<li>The laser shooting range is extended by some percentage</li>
-<li>The player cannot be killed by a laser for some percentage of its range</li>
+<li>Le rayon du radar est étendu sur un certain pourcentage</li>
+<li>La plage de prise de vue au laser est étendue sur un certain pourcentage</li>
+<li>Le joueur ne peut pas être tué par un laser sur un certain pourcentage de sa portée</li>
 </ul>
 <hr>
 
-To avoid a service outage during this time, we would have to roll out updates dynamically.
-We can code into the API a few resources which can enable us to simply alter the parameters for a particular player or players.
+Pour éviter une interruption de service pendant cette période, nous devons déployer les mises à jour de manière dynamique.
+Nous pouvons ajouter dans l'API quelques ressources qui peuvent nous permettre de simplement modifier les paramètres d'un ou de plusieurs joueurs en particulier.
 <br>
-These requests would have to be authorized by us, using seperate authentication. <br>
-An example of these requests could be "/api/update/radar/{playerName}/{percent_increment}".<br>
-As mentioned earlier, we would have to include authentication for this.<br>
+Ces demandes devraient être autorisées par nous, en utilisant une authentification distincte. <br>
+Un exemple de ces demandes pourrait être "/ api / update / radar / {playerName} / {percent_increment}". <br>
+Comme mentionné précédemment, nous devons inclure l'authentification pour cela.<br>
 <br>
-The game in progress can continue as is, and all functionality would continue to work.<br>
-Players would suddenly notice an improvement in their statistics, without affecting the rest of the game.<br>
+Le jeu en cours peut continuer tel quel et toutes les fonctionnalités continueront de fonctionner. <br>
+Les joueurs remarqueraient soudain une amélioration de leurs statistiques, sans affecter le reste du jeu.<br>
 <br>
-We can simply add a prefix (eg /v1/) to every request coming from an old API version. This change can be implemented almost instantly without bringing down the server.
-<br><br>
+Nous pouvons simplement ajouter un préfixe (par exemple / v1 /) à chaque requête provenant d'une ancienne version d'API. Cette modification peut être implémentée presque instantanément sans arrêter le serveur.
+<br> <br>
