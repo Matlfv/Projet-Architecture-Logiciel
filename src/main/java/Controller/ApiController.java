@@ -61,6 +61,25 @@ public class ApiController {
        return true;
     }
 
+    /**
+     *
+     * @param name Name of the player
+     * @return response 200 with body containing state if player is registered, otherwise http response 404
+     */
+    @GetMapping("/api/player/{player_name}")
+    public ResponseEntity<?> playerStatus(@PathVariable("player_name") String name) {
+        if(!playerNameRoverMap.containsKey(name)) {
+            return ResponseEntity.status(404).body("Player does not exist");
+        }
+
+        MarsRover marsRover = playerNameRoverMap.get(name);
+
+        Map<String, Object> response = getStateResponse(name, marsRover, marsRover.getPlanetMap());
+
+        return ResponseEntity.status(200).body(response);
+
+    }
+
     @PostMapping("/api/player/{player_name}")
     public ResponseEntity<?> generatePlayer(@PathVariable("player_name") String name) {
 
