@@ -47,7 +47,25 @@ public class MarsRoverImpl implements MarsRover {
 		return getPos();
 	}
 
-	/**
+    /**
+     * Get the current position
+     *
+     * @return the position
+     */
+    public Position getPos() {
+        return this.pos;
+    }
+
+    /**
+     * Get the laser range
+     *
+     * @return Laser range for the mars rover as integer
+     */
+    public Integer getLaserRange() {
+        return this.laserRange;
+    }
+
+    /**
 	 * Iterate every step of the command and process it
 	 * 
 	 * @param c
@@ -213,10 +231,6 @@ public class MarsRoverImpl implements MarsRover {
 
         return originalPosition;
     }
-
-	private Position getPos() {
-		return this.pos;
-	}
 
 	private void setPos(Position pos) {
 		this.pos = pos;

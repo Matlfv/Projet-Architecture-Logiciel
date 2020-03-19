@@ -6,4 +6,5 @@ public interface PlanetMap {
 	Set<Position> obstaclePositions();
 	int getPlanetMapSize();
 	void deleteObstacle(Position obstaclePosition);
+	void setObstacles(Set<Position> obstacles);
 }

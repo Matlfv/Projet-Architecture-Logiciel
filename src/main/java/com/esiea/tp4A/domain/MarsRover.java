@@ -13,6 +13,10 @@ public interface MarsRover {
 		return this;
 	}
 
+	Position getPos();
+
+	Integer getLaserRange();
+
 	default Position move(String command) {
 		return Position.of(0, 0, Direction.NORTH);
 	}
