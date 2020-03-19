@@ -62,12 +62,14 @@ public class MarsRoverImpl implements MarsRover {
 			return this.rotateLeft();
 		case 'r':
 			return this.rotateRight();
+        case 's':
+            return this.shootLaser();
 		default:
 			return this.getPos();
 		}
 	}
 
-	/*
+	/**
 	 * Checks if given position is not already in use by an obstacle
 	 * 
 	 * @return true if there is no obstacle, false otherwise
@@ -171,7 +173,7 @@ public class MarsRoverImpl implements MarsRover {
 		}
 	}
 
-	/*
+	/**
 	 * Rotate the direction to the left
 	 */
 	private Position rotateLeft() {
@@ -188,6 +190,29 @@ public class MarsRoverImpl implements MarsRover {
 			return this.getPos();
 		}
 	}
+
+    /**
+     * Shoot the laser in the direction faced
+     */
+    private Position shootLaser() {
+        Position originalPosition = this.getPos();
+
+        Position tempPosition;
+
+        for(int i = 1; i <= this.laserRange; i++) {
+            tempPosition = this.computeMovement('f');
+
+            if(!this.checkMovement(tempPosition)) {
+//                If movement isn't possible due to obstacle
+                this.getPlanetMap().deleteObstacle(tempPosition);
+                break;
+            }
+
+            this.setPos(tempPosition);
+        }
+
+        return originalPosition;
+    }
 
 	private Position getPos() {
 		return this.pos;
