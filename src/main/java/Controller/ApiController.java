@@ -69,7 +69,7 @@ public class ApiController {
     @GetMapping("/api/player/{player_name}")
     public ResponseEntity<?> playerStatus(@PathVariable("player_name") String name) {
         if(!playerNameRoverMap.containsKey(name)) {
-            return ResponseEntity.status(404).body("Player does not exist");
+            return ResponseEntity.status(404).body("404 : Player does not exist");
         }
 
         MarsRover marsRover = playerNameRoverMap.get(name);
@@ -78,6 +78,27 @@ public class ApiController {
 
         return ResponseEntity.status(200).body(response);
 
+    }
+
+    /**
+     *
+     * @param name The name of the player
+     * @param command The command to be executed
+     * @return HTTP 404 if the player is not found
+     * @return HTTP 200 with the new status if player is found, after using commands
+     */
+    @PatchMapping("/api/player/{name}/{command}")
+    public ResponseEntity<?> executeCommand(@PathVariable("name") String name, @PathVariable("command") String command) {
+        if(!playerNameRoverMap.containsKey(name)) {
+            return ResponseEntity.status(404).body("404 : Player does not exist");
+        }
+
+        MarsRover marsRover = playerNameRoverMap.get(name);
+        marsRover.move(command);
+
+        Map<String, Object> response = getStateResponse(name, marsRover, marsRover.getPlanetMap());
+
+        return ResponseEntity.status(200).body(response);
     }
 
     @PostMapping("/api/player/{player_name}")
@@ -122,6 +143,7 @@ public class ApiController {
 
         planetMap.setObstacles(obstacles);
         marsRover.updateMap(planetMap);
+        marsRover.configureLaserRange(5);
 
         Map<String, Object> response = getStateResponse(name, marsRover, planetMap);
 
