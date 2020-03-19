@@ -6,14 +6,21 @@ public class PlanetMapImpl implements PlanetMap {
 	private final int MAP_SIZE = 100;
 	private Set<Position> obstacles;
 	
-	/*
+	/**
 	 * PlanetMapImpl constructor
 	 */
 	public PlanetMapImpl(Set<Position> obstaclePositions) {
 		this.obstacles = obstaclePositions;
 	}
+
+    /**
+     * PlanetMapImpl constructor without obstacles
+     */
+    public PlanetMapImpl() {
+//
+    }
 	
-	/*
+	/**
 	 * Retrieves map size
 	 * 
 	 * @return Map size
@@ -22,7 +29,7 @@ public class PlanetMapImpl implements PlanetMap {
 		return this.MAP_SIZE;
 	}
 	
-	/*
+	/**
 	 * Retrieves all obstacles
 	 * 
 	 * @return Set<Position> of obstacles
