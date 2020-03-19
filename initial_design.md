@@ -1,7 +1,7 @@
 Le jeu se jouera au tour par tour. <br>
-Puisqu'il peut y avoir plusieurs joueurs, nous pouvons rencontrer des difficultés avec la concurrence car les joueurs peuvent se déplacer en même temps, ou même occuper le même espace. <br>
+Comme il peut y avoir plusieurs joueurs, nous pouvons rencontrer des difficultés avec la concurrence car les joueurs peuvent se déplacer en même temps, ou même occuper le même espace. <br>
 <br>
-L'état du jeu peut être stocké sous la forme des parties suivantes (comme représenté sur le schéma): <br>
+L'état du jeu peut être stocké sous la forme des points suivants : <br>
 <ul>
 <li> La position des obstacles dans le radar [liste (x, y)] </li>
 <li> La position de tous les joueurs du jeu [liste (x, y, direction)] </li>
@@ -17,9 +17,9 @@ Dead_or_Alive_List -> Game_State
 `` ''
 
 <br>
-Les informations sur le joueur comme le courrier électronique et éventuellement les mots de passe, le cas échéant, devraient être stockées en toute sécurité.
+Les informations sur le joueur comme le mail et éventuellement les mots de passe, le cas échéant, devraient être stockées en toute sécurité.
 <br>
-Nous pourrions utiliser le chiffrement (chiffrement cryptographique) pour stocker les identifiants des e-mails et d'autres données, tandis que les mots de passe ne seront pas stockés en texte brut mais hachés en utilisant un bon algorithme de hachage comme SHA-256 <br> <br>
+Nous pourrions utiliser un chiffrement cryptographique pour stocker les mails et d'autres données, tandis que les mots de passe ne seront pas stockés en texte brut mais hachés en utilisant un bon algorithme de hachage comme SHA-256 <br> <br>
 
 Comme nous pouvons avoir plusieurs jeux en même temps, chaque jeu aura sa propre copie de PlanetMap. Étant donné que nous utilisons un service Web REST, nous pouvons facilement attribuer un mappage d'un utilisateur à un PlanetMap particulier sur le backend (stocké en mémoire ou dans une base de données). Ainsi, le seul problème possible dans ce cas serait la mise à l'échelle.
 <br>
@@ -55,7 +55,7 @@ En cas de panne du serveur, nous exigerions que les états du jeu soient enregis
 <br> L'API deviendrait indisponible jusqu'à ce que le serveur soit de nouveau opérationnel. Cependant, la base de données devrait idéalement être suffisamment robuste pour restaurer les états du jeu et recommencer. <br> <br>
 <br>
 La progression du joueur serait automatiquement enregistrée dans le cadre de l'état du jeu dans la base de données après chaque demande d'API, car l'état est mis à jour à chaque fois.
-L'authentification nécessiterait l'utilisation d'un cadre avec une combinaison nom d'utilisateur / mot de passe (qui est actuellement disponible dans Spring Boot) et un chiffrement et un hachage sécurisés.
+L'authentification nécessiterait l'utilisation d'un cadre avec une combinaison nom d'utilisateur / mot de passe (qui est actuellement disponible dans Spring Boot), un chiffrement et un hachage sécurisés.
 Si le joueur quitte la partie, sa position est automatiquement enregistrée, ce qui signifie que sa progression est enregistrée. <br>
 Lorsque ce joueur revient, il sera restauré en un seul appel d'API en recherchant dans l'état du jeu. <br> <br>
 Pour gérer une charge inattendue, nous aurions besoin de services externes comme des équilibreurs de charge qui peuvent automatiquement évoluer vers des charges plus importantes.
