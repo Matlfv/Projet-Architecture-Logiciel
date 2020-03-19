@@ -34,4 +34,8 @@ public class PlanetMapImpl implements PlanetMap {
 	public void setObstacles(Set<Position> obstaclePositions) {
 		this.obstacles = obstaclePositions;
 	}
+
+	public void deleteObstacle(Position obstaclePosition) {
+        obstacles.removeIf(position -> position.getX() == obstaclePosition.getX() && position.getY() == obstaclePosition.getY());
+    }
 }

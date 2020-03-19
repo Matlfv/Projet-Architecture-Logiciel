@@ -300,6 +300,22 @@ public class MarsRoverTest {
 			.extracting(Position::getX, Position::getY, Position::getDirection)
 			.containsExactly(0, 0, Direction.EAST);
 	}
+
+	@Test
+    void testLaserFunction() {
+	    MarsRover marsRover = new MarsRoverImpl().initialize(Position.of(0, 0, Direction.NORTH));
+	    marsRover.configureLaserRange(2);
+
+        Set<Position> set = new HashSet<Position>();
+        set.add(Position.of(0, 2, Direction.NORTH));
+        marsRover.updateMap(new PlanetMapImpl(set));
+
+        Assertions.assertThat(marsRover.move("sff"))
+            .as("Rover is shooting a laser forward(North), and then moving forward")
+            .extracting(Position::getX, Position::getY, Position::getDirection)
+            .containsExactly(0, 2, Direction.NORTH);
+
+    }
 	
 	@Test
 	void testIssue23() {
