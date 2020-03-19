@@ -104,6 +104,15 @@ public class ApiController {
         planetMap.setObstacles(obstacles);
         marsRover.updateMap(planetMap);
 
+        Map<String, Object> response = getStateResponse(name, marsRover, planetMap);
+
+        playerNameRoverMap.put(name, marsRover);
+
+        return ResponseEntity.status(201).body(response);
+
+    }
+
+    private Map<String, Object> getStateResponse(String name, MarsRover marsRover, PlanetMap planetMap) {
         Map<String, Object> response = new HashMap<>();
         Map<String, Object> playerObj = new HashMap<>();
         Map<String, Object> positionObj = new HashMap<>();
@@ -136,10 +145,7 @@ public class ApiController {
 
         response.put("local-map", localMapObj);
 
-        playerNameRoverMap.put(name, marsRover);
-
-        return ResponseEntity.status(201).body(response);
-
+        return response;
     }
 
 }

@@ -66,6 +66,15 @@ public class MarsRoverImpl implements MarsRover {
     }
 
     /**
+     * Returns the planet map for the rover
+     *
+     * @return the planet map for the rover
+     */
+    public PlanetMap getPlanetMap() {
+        return this.planetMap;
+    }
+
+    /**
 	 * Iterate every step of the command and process it
 	 * 
 	 * @param c
@@ -244,7 +253,4 @@ public class MarsRoverImpl implements MarsRover {
 		this.planetMap = planetMap;
 	}
 
-	private PlanetMap getPlanetMap() {
-		return this.planetMap;
-	}
 }

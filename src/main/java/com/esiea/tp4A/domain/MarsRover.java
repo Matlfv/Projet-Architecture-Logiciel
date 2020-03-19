@@ -17,6 +17,8 @@ public interface MarsRover {
 
 	Integer getLaserRange();
 
+	PlanetMap getPlanetMap();
+
 	default Position move(String command) {
 		return Position.of(0, 0, Direction.NORTH);
 	}
