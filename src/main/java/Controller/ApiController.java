@@ -101,6 +101,11 @@ public class ApiController {
         return ResponseEntity.status(200).body(response);
     }
 
+    /**
+     *
+     * @param name Name of the player to register
+     * @return the status of the new player, http 201 if success - 409 if player exists
+     */
     @PostMapping("/api/player/{player_name}")
     public ResponseEntity<?> generatePlayer(@PathVariable("player_name") String name) {
 
