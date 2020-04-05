@@ -28,7 +28,7 @@ public class MarsRoverTest {
 			.initialize(Position.of(0, -49, Direction.SOUTH));
 	final MarsRover mrBottomNorth = new MarsRoverImpl()
 			.initialize(Position.of(0, -49, Direction.NORTH));
-	
+
 	@Test
 	void testMoveForwardFromOrigin() {
 		Assertions.assertThat(mr.move("f"))
@@ -144,7 +144,7 @@ public class MarsRoverTest {
 	@Test
 	void testMultipleMovesRight() {
 		Assertions.assertThat(mr.move("rffff"))
-			.as("Rover moving 4 times to the left")
+			.as("Rover moving 4 times to the right")
 			.extracting(Position::getX, Position::getY, Position::getDirection)
 			.containsExactly(4, 0, Direction.EAST);
 	}
@@ -176,7 +176,15 @@ public class MarsRoverTest {
 	@Test
 	void testMultipleMovements2() {
 		Assertions.assertThat(mr.move("frfrfrfr"))
-			.as("Rover move in circle to the origin")
+			.as("Rover move in circle to the origin by rotating right")
+			.extracting(Position::getX, Position::getY, Position::getDirection)
+			.containsExactly(0, 0, Direction.NORTH);
+	}
+	
+	@Test
+	void testMultipleMovements3() {
+		Assertions.assertThat(mr.move("flflflfl"))
+			.as("Rover move in circle to the origin by rotating left")
 			.extracting(Position::getX, Position::getY, Position::getDirection)
 			.containsExactly(0, 0, Direction.NORTH);
 	}
