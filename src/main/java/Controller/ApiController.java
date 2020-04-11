@@ -36,7 +36,7 @@ public class ApiController {
      */
     @RequestMapping(path = "/rover/position" , method = RequestMethod.GET)
     @ResponseBody
-    public String getPositionOfRover(@RequestBody Integer roverId) {
+    public String getPositionOfRover(Integer roverId) {
         return (HttpStatus.OK + "Rover Position");
     }
 
@@ -45,9 +45,9 @@ public class ApiController {
      * @param command
      * @return
      */
-    @RequestMapping(path = "/rover/move" , method = RequestMethod.POST)
+    @RequestMapping(path = "/rover/move" , method = RequestMethod.GET)
     @ResponseBody
-    public String handlePositionOfRover(@RequestBody String command) {
+    public String handlePositionOfRover(String command) {
         return (HttpStatus.OK + "Rover has moved with the command : " + command);
     }
 
@@ -57,27 +57,22 @@ public class ApiController {
      */
     @RequestMapping(path = "/rover/alive" , method = RequestMethod.GET)
     @ResponseBody
-    public Boolean getStatutRover(@RequestBody Integer roverId) {
+    public Boolean getStatutRover(Integer roverId) {
        return true;
     }
 
     /**
      *
      * @param name Name of the player
-     * @return response 200 with body containing state if player is registered, otherwise http response 404
+     * @return response 200 with body containing state if player is registered
      */
     @GetMapping("/api/player/{player_name}")
     public ResponseEntity<?> playerStatus(@PathVariable("player_name") String name) {
-        if(!playerNameRoverMap.containsKey(name)) {
-            return ResponseEntity.status(404).body("404 : Player does not exist");
-        }
-
         MarsRover marsRover = playerNameRoverMap.get(name);
 
         Map<String, Object> response = getStateResponse(name, marsRover, marsRover.getPlanetMap());
 
         return ResponseEntity.status(200).body(response);
-
     }
 
     /**
@@ -87,9 +82,9 @@ public class ApiController {
      * @return HTTP 404 if the player is not found
      * @return HTTP 200 with the new status if player is found, after using commands
      */
-    @PatchMapping("/api/player/{name}/{command}")
+    @GetMapping("/api/player/{name}/{command}")
     public ResponseEntity<?> executeCommand(@PathVariable("name") String name, @PathVariable("command") String command) {
-        if(!playerNameRoverMap.containsKey(name)) {
+        if(name.isEmpty()) {
             return ResponseEntity.status(404).body("404 : Player does not exist");
         }
 
