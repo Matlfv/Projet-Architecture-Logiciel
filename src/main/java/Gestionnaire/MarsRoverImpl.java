@@ -83,18 +83,12 @@ public class MarsRoverImpl implements MarsRover {
 	 */
 	private Position computeMovement(char c) {
 		switch (c) {
-		case 'f':
-			return this.moveForward();
-		case 'b':
-			return this.moveBackward();
-		case 'l':
-			return this.rotateLeft();
-		case 'r':
-			return this.rotateRight();
-        case 's':
-            return this.shootLaser();
-		default:
-			return this.getPos();
+		case 'f': return this.moveForward();
+		case 'b': return this.moveBackward();
+		case 'l': return this.rotateLeft();
+		case 'r': return this.rotateRight();
+        case 's': return this.shootLaser();
+		default: return this.getPos();
 		}
 	}
 
@@ -207,16 +201,11 @@ public class MarsRoverImpl implements MarsRover {
 	 */
 	private Position rotateLeft() {
 		switch (this.pos.getDirection()) {
-		case NORTH:
-			return Position.of(this.pos.getX(), this.pos.getY(), Direction.WEST);
-		case SOUTH:
-			return Position.of(this.pos.getX(), this.pos.getY(), Direction.EAST);
-		case EAST:
-			return Position.of(this.pos.getX(), this.pos.getY(), Direction.NORTH);
-		case WEST:
-			return Position.of(this.pos.getX(), this.pos.getY(), Direction.SOUTH);
-		default:
-			return this.getPos();
+		case NORTH: return Position.of(this.pos.getX(), this.pos.getY(), Direction.WEST);
+		case SOUTH: return Position.of(this.pos.getX(), this.pos.getY(), Direction.EAST);
+		case EAST: return Position.of(this.pos.getX(), this.pos.getY(), Direction.NORTH);
+		case WEST: return Position.of(this.pos.getX(), this.pos.getY(), Direction.SOUTH);
+		default: return this.getPos();
 		}
 	}
 
@@ -225,21 +214,18 @@ public class MarsRoverImpl implements MarsRover {
      */
     private Position shootLaser() {
         Position originalPosition = this.getPos();
-
         Position tempPosition;
 
         for(int i = 1; i <= this.laserRange; i++) {
             tempPosition = this.computeMovement('f');
 
             if(!this.checkMovement(tempPosition)) {
-//                If movement isn't possible due to obstacle
+                //If movement isn't possible due to obstacle
                 this.getPlanetMap().deleteObstacle(tempPosition);
                 break;
             }
-
             this.setPos(tempPosition);
         }
-
         return originalPosition;
     }
 
