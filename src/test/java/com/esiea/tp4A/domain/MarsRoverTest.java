@@ -10,25 +10,25 @@ import org.junit.jupiter.api.Test;
 
 public class MarsRoverTest {
 	
-	final MarsRover mr = new MarsRoverImpl()
+	final MarsRoverImpl mr = (MarsRoverImpl) new MarsRoverImpl()
 			.initialize(Position.of(0, 0, Direction.NORTH));
-	final MarsRover mrIssue23 = new MarsRoverImpl()
+	final MarsRoverImpl mrIssue23 = (MarsRoverImpl) new MarsRoverImpl()
 			.initialize(Position.of(4, 4, Direction.SOUTH));
-	final MarsRover mrRightEast = new MarsRoverImpl().
+	final MarsRoverImpl mrRightEast = (MarsRoverImpl) new MarsRoverImpl().
 			initialize(Position.of(50, 0, Direction.EAST));
-	final MarsRover mrRightWest = new MarsRoverImpl()
+	final MarsRoverImpl mrRightWest = (MarsRoverImpl) new MarsRoverImpl()
 			.initialize(Position.of(50, 0, Direction.WEST));
-	final MarsRover mrLeftWest = new MarsRoverImpl()
+	final MarsRoverImpl mrLeftWest = (MarsRoverImpl) new MarsRoverImpl()
 			.initialize(Position.of(-49, 0, Direction.WEST));
-	final MarsRover mrLeftEast = new MarsRoverImpl()
+	final MarsRoverImpl mrLeftEast = (MarsRoverImpl) new MarsRoverImpl()
 			.initialize(Position.of(-49, 0, Direction.EAST));
-	final MarsRover mrTopNorth = new MarsRoverImpl()
+	final MarsRoverImpl mrTopNorth = (MarsRoverImpl) new MarsRoverImpl()
 			.initialize(Position.of(0, 50, Direction.NORTH));
-	final MarsRover mrTopSouth = new MarsRoverImpl()
+	final MarsRoverImpl mrTopSouth = (MarsRoverImpl) new MarsRoverImpl()
 			.initialize(Position.of(0, 50, Direction.SOUTH));
-	final MarsRover mrBottomSouth = new MarsRoverImpl()
+	final MarsRoverImpl mrBottomSouth = (MarsRoverImpl) new MarsRoverImpl()
 			.initialize(Position.of(0, -49, Direction.SOUTH));
-	final MarsRover mrBottomNorth = new MarsRoverImpl()
+	final MarsRoverImpl mrBottomNorth = (MarsRoverImpl) new MarsRoverImpl()
 			.initialize(Position.of(0, -49, Direction.NORTH));
 
 	@Test
@@ -193,7 +193,7 @@ public class MarsRoverTest {
 	
 	@Test
 	void testMoveForwardFromOriginNorthWithObstacle() {
-		MarsRover marsRover = new MarsRoverImpl()
+		MarsRoverImpl marsRover = (MarsRoverImpl) new MarsRoverImpl()
 				.initialize(Position.of(0, 0, Direction.NORTH));
 		
 		Set<Position> set = new HashSet<Position>();
@@ -208,7 +208,7 @@ public class MarsRoverTest {
 	
 	@Test
 	void testMoveForwardFromOriginSouthWithObstacle() {
-		MarsRover marsRover = new MarsRoverImpl()
+		MarsRoverImpl marsRover = (MarsRoverImpl) new MarsRoverImpl()
 				.initialize(Position.of(0, 0, Direction.SOUTH));
 		
 		Set<Position> set = new HashSet<Position>();
@@ -223,7 +223,7 @@ public class MarsRoverTest {
 	
 	@Test
 	void testMoveForwardFromOriginWestWithObstacle() {
-		MarsRover marsRover = new MarsRoverImpl()
+		MarsRoverImpl marsRover = (MarsRoverImpl) new MarsRoverImpl()
 				.initialize(Position.of(0, 0, Direction.WEST));
 		
 		Set<Position> set = new HashSet<Position>();
@@ -238,7 +238,7 @@ public class MarsRoverTest {
 	
 	@Test
 	void testMoveForwardFromOriginEastWithObstacle() {
-		MarsRover marsRover = new MarsRoverImpl()
+		MarsRoverImpl marsRover = (MarsRoverImpl) new MarsRoverImpl()
 				.initialize(Position.of(0, 0, Direction.EAST));
 		
 		Set<Position> set = new HashSet<Position>();
@@ -253,7 +253,7 @@ public class MarsRoverTest {
 	
 	@Test
 	void testMoveDownwardFromOriginNorthWithObstacle() {
-		MarsRover marsRover = new MarsRoverImpl()
+		MarsRoverImpl marsRover = (MarsRoverImpl) new MarsRoverImpl()
 				.initialize(Position.of(0, 0, Direction.NORTH));
 		
 		Set<Position> set = new HashSet<Position>();
@@ -268,7 +268,7 @@ public class MarsRoverTest {
 	
 	@Test
 	void testMoveDownwardFromOriginSouthWithObstacle() {
-		MarsRover marsRover = new MarsRoverImpl()
+		MarsRoverImpl marsRover = (MarsRoverImpl) new MarsRoverImpl()
 				.initialize(Position.of(0, 0, Direction.SOUTH));
 		
 		Set<Position> set = new HashSet<Position>();
@@ -283,7 +283,7 @@ public class MarsRoverTest {
 	
 	@Test
 	void testMoveDownwardFromOriginWestWithObstacle() {
-		MarsRover marsRover = new MarsRoverImpl()
+		MarsRoverImpl marsRover = (MarsRoverImpl) new MarsRoverImpl()
 				.initialize(Position.of(0, 0, Direction.WEST));
 		
 		Set<Position> set = new HashSet<Position>();
@@ -298,7 +298,7 @@ public class MarsRoverTest {
 	
 	@Test
 	void testMoveDownwardFromOriginEastWithObstacle() {
-		MarsRover marsRover = new MarsRoverImpl()
+		MarsRoverImpl marsRover = (MarsRoverImpl) new MarsRoverImpl()
 				.initialize(Position.of(0, 0, Direction.EAST));
 		
 		Set<Position> set = new HashSet<Position>();

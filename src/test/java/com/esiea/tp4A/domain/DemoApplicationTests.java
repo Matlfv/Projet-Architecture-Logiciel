@@ -53,6 +53,7 @@ class DemoApplicationTests {
 
 
         //Verify request succeed
+        Assertions.assertEquals(201, regResult.getStatusCodeValue());
         Assertions.assertEquals(200, result.getStatusCodeValue());
         Assertions.assertEquals(true, result.getBody().contains("name"));
         Assertions.assertEquals(true, result.getBody().contains("local-map"));

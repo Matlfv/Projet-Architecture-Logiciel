@@ -9,7 +9,7 @@ import java.util.*;
 
 public class GestionnaireApiControllerImpl {
 
-    public Map<String, Object> getStateResponse(String name, MarsRover marsRover, PlanetMap planetMap) {
+    public Map<String, Object> getStateResponse(String name, MarsRoverImpl marsRover, PlanetMap planetMap) {
         Map<String, Object> response = new HashMap<>();
         Map<String, Object> playerObj = new HashMap<>();
         Map<String, Object> positionObj = new HashMap<>();

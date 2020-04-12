@@ -20,7 +20,7 @@ public class ApiController extends GestionnaireApiControllerImpl {
         SpringApplication.run(ApiController.class, args);
     }
 
-    private final Map<String, MarsRover> playerNameRoverMap = new HashMap<>();
+    private final Map<String, MarsRoverImpl> playerNameRoverMap = new HashMap<>();
 
     @GetMapping("/hello")
     public String hello(@RequestParam(value = "name", defaultValue = "World") String name) {
@@ -47,7 +47,7 @@ public class ApiController extends GestionnaireApiControllerImpl {
 
     @GetMapping("/api/player/{player_name}")
     public ResponseEntity<?> playerStatus(@PathVariable("player_name") String name) {
-        MarsRover marsRover = playerNameRoverMap.get(name);
+    	MarsRoverImpl marsRover = playerNameRoverMap.get(name);
         Map<String, Object> response = getStateResponse(name, marsRover, marsRover.getPlanetMap());
         return ResponseEntity.status(200).body(response);
     }
@@ -61,7 +61,7 @@ public class ApiController extends GestionnaireApiControllerImpl {
     public ResponseEntity<?> executeCommand(@PathVariable("name") String name, @PathVariable("command") String command) {
         if(name.isEmpty()) return ResponseEntity.status(404).body("404 : Player does not exist");
 
-        MarsRover marsRover = playerNameRoverMap.get(name);
+        MarsRoverImpl marsRover = playerNameRoverMap.get(name);
         marsRover.move(command);
 
         Map<String, Object> response = getStateResponse(name, marsRover, marsRover.getPlanetMap());
@@ -82,10 +82,10 @@ public class ApiController extends GestionnaireApiControllerImpl {
 
         Direction dir = getDirection(random);
 
-        MarsRover marsRover = new MarsRoverImpl().initialize(Position.of(random.nextInt()%10, random.nextInt()%10, dir));
+        MarsRoverImpl marsRover = (MarsRoverImpl) new MarsRoverImpl().initialize(Position.of(random.nextInt()%10, random.nextInt()%10, dir));
 
         Set<Position> obstacles = new HashSet<>();
-        PlanetMap planetMap = new PlanetMapImpl();
+        PlanetMapImpl planetMap = new PlanetMapImpl();
 
         int size = planetMap.getPlanetMapSize();
 
