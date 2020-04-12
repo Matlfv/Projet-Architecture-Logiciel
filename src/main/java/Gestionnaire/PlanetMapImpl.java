@@ -1,4 +1,7 @@
-package com.esiea.tp4A.domain;
+package Gestionnaire;
+
+import com.esiea.tp4A.domain.PlanetMap;
+import com.esiea.tp4A.domain.Position;
 
 import java.util.Set;
 

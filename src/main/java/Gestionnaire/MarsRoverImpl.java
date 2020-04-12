@@ -1,4 +1,6 @@
-package com.esiea.tp4A.domain;
+package Gestionnaire;
+
+import com.esiea.tp4A.domain.*;
 
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
