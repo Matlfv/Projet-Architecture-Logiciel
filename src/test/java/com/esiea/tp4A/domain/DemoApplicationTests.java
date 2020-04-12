@@ -24,7 +24,6 @@ class DemoApplicationTests {
 
 	@Test
 	void apiRegisterPlayerTest() throws URISyntaxException {
-
         ResponseEntity<String> result = restTemplate
             .exchange("/api/player/test_player_reg", HttpMethod.POST, null, String.class);
 
@@ -45,7 +44,6 @@ class DemoApplicationTests {
 
 	@Test
     void apiPlayerStatusTest() throws URISyntaxException {
-
         ResponseEntity<String> regResult = restTemplate
             .exchange("/api/player/test_player_status", HttpMethod.POST, null, String.class);
         ResponseEntity<String> result = restTemplate
@@ -63,13 +61,13 @@ class DemoApplicationTests {
 
     @Test
     void apiPlayerMoveTest() throws URISyntaxException {
-
         ResponseEntity<String> regResult = restTemplate
             .exchange("/api/player/test_player_move", HttpMethod.POST, null, String.class);
         ResponseEntity<String> result = restTemplate
             .exchange("/api/player/test_player_move", HttpMethod.GET, null, String.class);
 
         //Verify request succeed
+        Assertions.assertEquals(201, regResult.getStatusCodeValue());
         Assertions.assertEquals(200, result.getStatusCodeValue());
         Assertions.assertEquals(true, result.getBody().contains("name"));
         Assertions.assertEquals(true, result.getBody().contains("local-map"));
