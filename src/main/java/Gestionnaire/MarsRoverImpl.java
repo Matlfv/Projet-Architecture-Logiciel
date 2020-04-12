@@ -220,8 +220,7 @@ public class MarsRoverImpl implements MarsRover {
 
             if(!this.checkMovement(tempPosition)) {
                 //If movement isn't possible due to obstacle
-                this.getPlanetMap().deleteObstacle(tempPosition);
-                break;
+                this.getPlanetMap().deleteObstacle(tempPosition); break;
             }
             this.setPos(tempPosition);
         }

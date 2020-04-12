@@ -59,8 +59,6 @@ public class ApiController extends GestionnaireApiControllerImpl {
      */
     @GetMapping("/api/player/{name}/{command}")
     public ResponseEntity<?> executeCommand(@PathVariable("name") String name, @PathVariable("command") String command) {
-        if(name.isEmpty()) return ResponseEntity.status(404).body("404 : Player does not exist");
-
         MarsRoverImpl marsRover = playerNameRoverMap.get(name);
         marsRover.move(command);
 
