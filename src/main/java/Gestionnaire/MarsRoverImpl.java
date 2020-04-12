@@ -9,7 +9,7 @@ import java.util.Iterator;
 
 public class MarsRoverImpl implements MarsRover {
 	private Position pos;
-	private PlanetMap planetMap;
+	private PlanetMapImpl planetMap;
 	private int laserRange;
 
 	@Override
@@ -20,8 +20,7 @@ public class MarsRoverImpl implements MarsRover {
 		return this;
 	}
 
-	@Override
-	public MarsRover updateMap(PlanetMap map) {
+	public MarsRover updateMap(PlanetMapImpl map) {
 		this.setPlanetMap(map);
 		return this;
 	}
@@ -72,7 +71,7 @@ public class MarsRoverImpl implements MarsRover {
      *
      * @return the planet map for the rover
      */
-    public PlanetMap getPlanetMap() {
+    public PlanetMapImpl getPlanetMap() {
         return this.planetMap;
     }
 
@@ -237,7 +236,7 @@ public class MarsRoverImpl implements MarsRover {
 		this.laserRange = laserRange;
 	}
 
-	private void setPlanetMap(PlanetMap planetMap) {
+	private void setPlanetMap(PlanetMapImpl planetMap) {
 		this.planetMap = planetMap;
 	}
 
