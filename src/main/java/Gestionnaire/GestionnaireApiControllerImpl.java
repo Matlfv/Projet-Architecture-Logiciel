@@ -67,10 +67,11 @@ public class GestionnaireApiControllerImpl {
         return dir;
     }
 
-    public void getRandomObstaclePosition(Random random, Set<Position> obstacles, int size) {
+    public void generateObstaclePosition(Set<Position> obstacles, int size) {
+    	Random rand = new Random();
         for(int i = 0; i < 0.15*(size * size) ; i++){
-            int x = random.nextInt()%size;
-            int y = random.nextInt()%size;
+            int x = rand.nextInt()%size;
+            int y = rand.nextInt()%size;
 
             Position pos = Position.of(x, y, Direction.NORTH);
 

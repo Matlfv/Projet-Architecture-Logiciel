@@ -23,72 +23,35 @@ public class ApiController extends GestionnaireApiControllerImpl {
     private final Map<String, MarsRoverImpl> playerNameRoverMap = new HashMap<>();
 
     @GetMapping("/hello")
-    public String hello(@RequestParam(value = "name", defaultValue = "World") String name) {
-        return String.format("Hello %s!", name);
+    public ResponseEntity<?> hello(@RequestParam(value = "name", defaultValue = "World") String name) {
+    	return ResponseEntity.status(HttpStatus.OK).body(getHelloMessage(name));
     }
 
-    @RequestMapping(path = "/rover/position" , method = RequestMethod.GET)
+    @GetMapping("/api/position/{player_name}")
     @ResponseBody
-    public String getPositionOfRover(Integer roverId) {
-        return (HttpStatus.OK + "Rover Position");
-    }
-
-    @RequestMapping(path = "/rover/move" , method = RequestMethod.GET)
-    @ResponseBody
-    public String handlePositionOfRover(String command) {
-        return (HttpStatus.OK + "Rover has moved with the command : " + command);
-    }
-
-    @RequestMapping(path = "/rover/alive" , method = RequestMethod.GET)
-    @ResponseBody
-    public Boolean getStatutRover(Integer roverId) {
-       return true;
-    }
-
-    @GetMapping("/api/player/{player_name}")
-    public ResponseEntity<?> playerStatus(@PathVariable("player_name") String name) {
+    public ResponseEntity<?> getPositionOfRover(@PathVariable("player_name") String name) {
     	MarsRoverImpl marsRover = playerNameRoverMap.get(name);
-        Map<String, Object> response = getStateResponse(name, marsRover, marsRover.getPlanetMap());
-        return ResponseEntity.status(200).body(response);
+    	if (marsRover == null)
+        	return ResponseEntity.status(HttpStatus.NOT_FOUND).body(getPlayerNotFoundMessage());
+    	return ResponseEntity.status(HttpStatus.OK).body(getMarsRoverPositionMessage(marsRover.getPos(), name));
     }
-
-    /**
-     *
-     * @return HTTP 404 if the player is not found
-     * @return HTTP 200 with the new status if player is found, after using commands
-     */
-    @GetMapping("/api/player/{name}/{command}")
-    public ResponseEntity<?> executeCommand(@PathVariable("name") String name, @PathVariable("command") String command) {
-        MarsRoverImpl marsRover = playerNameRoverMap.get(name);
-        marsRover.move(command);
-
-        Map<String, Object> response = getStateResponse(name, marsRover, marsRover.getPlanetMap());
-
-        return ResponseEntity.status(200).body(response);
-    }
-
+    
     /**
      * @param name Name of the player to register
-     * @return the status of the new player, http 201 if success - 409 if player exists
+     * @return the status of the new player, HTTP 201 if success - 409 if player exists
      */
     @PostMapping("/api/player/{player_name}")
     public ResponseEntity<?> generatePlayer(@PathVariable("player_name") String name) {
-        if(playerNameRoverMap.containsKey(name))
-            return ResponseEntity.status(409).body("Player name is not available");
+        if (playerNameRoverMap.containsKey(name)) {
+        	return ResponseEntity.status(HttpStatus.NOT_FOUND).body(getPlayerExistingMessage());
+        }
 
         Random random = new Random();
-
         Direction dir = getDirection(random);
-
         MarsRoverImpl marsRover = (MarsRoverImpl) new MarsRoverImpl().initialize(Position.of(random.nextInt()%10, random.nextInt()%10, dir));
-
         Set<Position> obstacles = new HashSet<>();
         PlanetMapImpl planetMap = new PlanetMapImpl();
-
-        int size = planetMap.getPlanetMapSize();
-
-        getRandomObstaclePosition(random, obstacles, size);
-
+        generateObstaclePosition(obstacles, planetMap.getPlanetMapSize());
         planetMap.setObstacles(obstacles);
         marsRover.updateMap(planetMap);
         marsRover.configureLaserRange(5);
@@ -96,6 +59,75 @@ public class ApiController extends GestionnaireApiControllerImpl {
         Map<String, Object> response = getStateResponse(name, marsRover, planetMap);
         playerNameRoverMap.put(name, marsRover);
 
-        return ResponseEntity.status(201).body(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+    
+    @GetMapping("/api/player/{player_name}")
+    public ResponseEntity<?> playerStatus(@PathVariable("player_name") String name) {
+    	MarsRoverImpl marsRover = playerNameRoverMap.get(name);
+    	if (marsRover == null)
+        	return ResponseEntity.status(HttpStatus.NOT_FOUND).body(getPlayerNotFoundMessage());
+    	
+        return ResponseEntity.status(HttpStatus.OK).body(getStateResponse(name, marsRover, marsRover.getPlanetMap()));
+    }
+
+    /**
+     *
+     * @return HTTP 404 if the player is not found
+     * @return HTTP 200 with the new status if player is found, after using commands
+     */
+    @PatchMapping("/api/player/{name}/{command}")
+    public ResponseEntity<?> executeCommand(@PathVariable("name") String name, @PathVariable("command") String command) {
+        MarsRoverImpl marsRover = playerNameRoverMap.get(name);
+        if (marsRover == null)
+        	return ResponseEntity.status(HttpStatus.NOT_FOUND).body(getPlayerNotFoundMessage());
+        marsRover.move(command);
+        return ResponseEntity.status(HttpStatus.OK).body(getStateResponse(name, marsRover, marsRover.getPlanetMap()));
+    }
+    
+    /**
+     * Generates a response with an hello message
+     * @return a map that contains response
+     */
+    private Map<String, String> getHelloMessage(String name) {
+    	Map<String, String> res = new HashMap<>();
+    	res.put("status", HttpStatus.OK.toString());
+    	res.put("message", String.format("Hello %s!", name));
+    	return res;
+    }
+    
+    /**
+     * Generates a response with an MarsRover position
+     * @return a map that contains response
+     */
+    private Map<String, String> getMarsRoverPositionMessage(Position pos, String name) {
+    	Map<String, String> res = new HashMap<>();
+    	res.put("status", HttpStatus.OK.toString());
+    	res.put("player_name", name);
+    	res.put("x", Integer.toString(pos.getX()));
+    	res.put("y", Integer.toString(pos.getY()));
+    	return res;
+    }
+    
+    /**
+     * Generates a response for inexistent player
+     * @return a map that contains response
+     */
+    private Map<String, String> getPlayerNotFoundMessage() {
+    	Map<String, String> res = new HashMap<>();
+    	res.put("status", HttpStatus.NOT_FOUND.toString());
+    	res.put("message", "Player does not exist");
+    	return res;
+    }
+    
+    /**
+     * Generates a response for existing player name
+     * @return a map that contains response
+     */
+    private Map<String, String> getPlayerExistingMessage() {
+    	Map<String, String> res = new HashMap<>();
+    	res.put("status", HttpStatus.CONFLICT.toString());
+    	res.put("message", "Specified player name is already in use");
+    	return res;
     }
 }
