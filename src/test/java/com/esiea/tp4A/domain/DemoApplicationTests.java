@@ -1,16 +1,24 @@
 package com.esiea.tp4A.domain;
 
 import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.Map;
 
+import org.apache.http.client.HttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.json.JSONObject;
+import org.junit.Before;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import Controller.ApiController;
@@ -31,11 +39,11 @@ class DemoApplicationTests {
             .exchange("/api/player/test_player_reg", HttpMethod.POST, null, String.class);
 
         // Verify request gave 409
-        Assertions.assertEquals(409, fail_result.getStatusCodeValue());
+        Assertions.assertEquals(HttpStatus.CONFLICT, fail_result.getStatusCode());
 
 
         // Verify request succeed
-        Assertions.assertEquals(201, result.getStatusCodeValue());
+        Assertions.assertEquals(HttpStatus.CREATED, result.getStatusCode());
         Assertions.assertEquals(true, result.getBody().contains("name"));
         Assertions.assertEquals(true, result.getBody().contains("local-map"));
         Assertions.assertEquals(true, result.getBody().contains("alive"));
@@ -51,8 +59,8 @@ class DemoApplicationTests {
 
 
         //Verify request succeed
-        Assertions.assertEquals(201, regResult.getStatusCodeValue());
-        Assertions.assertEquals(200, result.getStatusCodeValue());
+        Assertions.assertEquals(HttpStatus.CREATED, regResult.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, result.getStatusCode());
         Assertions.assertEquals(true, result.getBody().contains("name"));
         Assertions.assertEquals(true, result.getBody().contains("local-map"));
         Assertions.assertEquals(true, result.getBody().contains("alive"));
@@ -67,8 +75,8 @@ class DemoApplicationTests {
             .exchange("/api/player/test_player_move", HttpMethod.GET, null, String.class);
 
         //Verify request succeed
-        Assertions.assertEquals(201, regResult.getStatusCodeValue());
-        Assertions.assertEquals(200, result.getStatusCodeValue());
+        Assertions.assertEquals(HttpStatus.CREATED, regResult.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, result.getStatusCode());
         Assertions.assertEquals(true, result.getBody().contains("name"));
         Assertions.assertEquals(true, result.getBody().contains("local-map"));
         Assertions.assertEquals(true, result.getBody().contains("alive"));
@@ -80,43 +88,23 @@ class DemoApplicationTests {
         ResponseEntity<String> result = restTemplate
                 .exchange("/hello", HttpMethod.GET, null, String.class);
     	
-         Assertions.assertEquals(200, result.getStatusCodeValue());
-         Assertions.assertEquals("Hello World!", result.getBody());
-    }
-    
-    @Test
-    void apiRoverPosition() throws URISyntaxException {
-        ResponseEntity<String> result = restTemplate
-                .exchange("/rover/position?roverId=1", HttpMethod.GET, null, String.class);
-    	
-         Assertions.assertEquals(200, result.getStatusCodeValue());
-         Assertions.assertEquals(HttpStatus.OK + "Rover Position", result.getBody());
-    }
-    
-    @Test 
-    void apiRoverMovement() throws URISyntaxException {
-        ResponseEntity<String> result = restTemplate
-                .exchange("/rover/move?command=f", HttpMethod.GET, null, String.class);
-    	
-         Assertions.assertEquals(200, result.getStatusCodeValue());
-         Assertions.assertEquals(HttpStatus.OK + "Rover has moved with the command : f", result.getBody());
-    }
-    
-    @Test 
-    void apiRoverStatus() throws URISyntaxException {
-        ResponseEntity<String> result = restTemplate
-                .exchange("/rover/alive?roverId=1", HttpMethod.GET, null, String.class);
-    	
-         Assertions.assertEquals(200, result.getStatusCodeValue());
-         Assertions.assertEquals("true", result.getBody());
+         Assertions.assertEquals(HttpStatus.OK, result.getStatusCode());
+     	 Map<String, String> res = new HashMap<>();
+    	 res.put("status", HttpStatus.OK.toString());
+    	 res.put("message", "Hello World!");
+         Assertions.assertEquals(new JSONObject(res).toString(), result.getBody());
     }
     
     @Test
     void apiExecuteCommandFailure() {
+    	RestTemplate patchRestTemplate = restTemplate.getRestTemplate();
+        HttpClient httpClient = HttpClientBuilder.create().build();
+        patchRestTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory(httpClient));
+        
     	restTemplate.exchange("/api/player/toto", HttpMethod.POST, null, String.class);
-        ResponseEntity<String> result = restTemplate
-                .exchange("/api/player/toto/f", HttpMethod.GET, null, String.class);
+        ResponseEntity<String> result = patchRestTemplate
+                .exchange("/api/player/toto/f", HttpMethod.PATCH, null, String.class);
     	
-         Assertions.assertEquals(200, result.getStatusCodeValue());
+        Assertions.assertEquals(HttpStatus.OK, result.getStatusCode());
     }
 }
