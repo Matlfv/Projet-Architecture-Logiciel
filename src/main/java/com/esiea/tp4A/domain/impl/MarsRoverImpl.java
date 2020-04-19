@@ -22,7 +22,7 @@ public class MarsRoverImpl implements MarsRover {
 
 	@Override
 	public MarsRover updateMap(PlanetMap map) {
-		this.setPlanetMap((PlanetMapImpl) map);
+		this.setPlanetMap(map);
 		return this;
 	}
 
@@ -236,8 +236,8 @@ public class MarsRoverImpl implements MarsRover {
 		this.laserRange = laserRange;
 	}
 
-	private void setPlanetMap(PlanetMapImpl planetMap) {
-		this.planetMap = planetMap;
+	private void setPlanetMap(PlanetMap planetMap) {
+		this.planetMap = (PlanetMapImpl) planetMap;
 	}
 
 }
