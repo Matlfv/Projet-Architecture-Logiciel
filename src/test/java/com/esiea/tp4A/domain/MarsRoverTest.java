@@ -340,4 +340,20 @@ public class MarsRoverTest {
 			.extracting(Position::getX, Position::getY, Position::getDirection)
 			.containsExactly(3, 4, Direction.EAST);
 	}
+	
+	@Test
+    void testIssue23Obstacles() {
+	    MarsRover marsRover = new MarsRoverImpl().initialize(Position.of(4, 4, Direction.SOUTH));
+
+
+        Set<Position> set = new HashSet<Position>();
+        set.add(Position.of(4, 5, Direction.NORTH));
+        marsRover.updateMap(new PlanetMapImpl(set));
+
+        Assertions.assertThat(marsRover.move("bllfrb"))
+            .as("Rover is shooting a laser forward(North), and then moving forward")
+            .extracting(Position::getX, Position::getY, Position::getDirection)
+            .containsExactly(3, 4, Direction.EAST);
+
+    }
 }

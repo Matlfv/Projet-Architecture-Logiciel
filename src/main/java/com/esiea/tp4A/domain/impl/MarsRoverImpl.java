@@ -20,8 +20,9 @@ public class MarsRoverImpl implements MarsRover {
 		return this;
 	}
 
-	public MarsRover updateMap(PlanetMapImpl map) {
-		this.setPlanetMap(map);
+	@Override
+	public MarsRover updateMap(PlanetMap map) {
+		this.setPlanetMap((PlanetMapImpl) map);
 		return this;
 	}
 
