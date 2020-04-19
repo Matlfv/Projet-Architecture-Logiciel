@@ -6,8 +6,8 @@ import java.util.Set;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import Gestionnaire.MarsRoverImpl;
-import Gestionnaire.PlanetMapImpl;
+import com.esiea.tp4A.domain.impl.MarsRoverImpl;
+import com.esiea.tp4A.domain.impl.PlanetMapImpl;
 
 public class MarsRoverTest {
 	
